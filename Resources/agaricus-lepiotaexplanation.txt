@@ -18,7 +18,7 @@
  *                                   green=r,orange=o,pink=p,purple=u,red=e,
  *                                   white=w,yellow=y
  *     10. stalk-shape:              enlarging=e,tapering=t
- *     11. stalk-root:               bulbous=b,club=c,cup=u,equal=e,
+ *     11. stalk-parent:               bulbous=b,club=c,cup=u,equal=e,
  *                                   rhizomorphs=z,rooted=r,missing=?
  *     12. stalk-surface-above-ring: ibrous=f,scaly=y,silky=k,smooth=s
  *     13. stalk-surface-below-ring: ibrous=f,scaly=y,silky=k,smooth=s

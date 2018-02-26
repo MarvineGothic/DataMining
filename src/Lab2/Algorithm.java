@@ -9,18 +9,25 @@ import static Lab2.enums.Class_Label.poisonous;
 
 @SuppressWarnings("unchecked")
 public class Algorithm {
-    private int eatableCount = 0;
-    private int poisonousCount = 0;
+    //private int edibleCount = 0;
+    //private int poisonousCount = 0;
     private Collection<Mushroom> dataPartition;
     private Collection<Object> editedAttributeList;
+
 
     public Algorithm(Collection<Mushroom> dataPartition) {
         this.dataPartition = dataPartition;
         this.editedAttributeList = Mushroom.getAttributeList();
-        this.eatableCount = DataManager.countAttributeCategories(dataPartition, Class_Label.class, edible, edible);
-        this.poisonousCount = DataManager.countAttributeCategories(dataPartition, Class_Label.class, poisonous, poisonous);
+        //this.edibleCount = DataManager.countAttributeCategories(dataPartition, Class_Label.class, edible, edible);
+        //this.poisonousCount = DataManager.countAttributeCategories(dataPartition, Class_Label.class, poisonous, poisonous);
     }
 
+    /**
+     * Entropy of D
+     * @param caseOccurrence frequency of a case
+     * @param allOccurrences all occurrences
+     * @return entropy
+     */
     public double infoD(double caseOccurrence, double allOccurrences) {
         if (caseOccurrence == 0) return 0;
         double div = caseOccurrence / allOccurrences;
@@ -43,7 +50,7 @@ public class Algorithm {
      * @param attributeList  list of attributes for object
      * @return a map with class name and value of info(D)
      */
-    public Class attributeSelection(Collection<Mushroom> data_partition, Collection<Object> attributeList) {
+    public Map<Double, Class> attributeSelection(Collection<Mushroom> data_partition, Collection<Object> attributeList) {
         Map<Double, Class> result = new TreeMap<>();
         for (Object attribute : attributeList) {
             Class currentEnumClass = (Class) attribute;                                // getting ENUM Class
@@ -53,56 +60,95 @@ public class Algorithm {
             for (Object category : categories) {
                 long catEdible = DataManager.countAttributeCategories(data_partition, currentEnumClass, category, edible);
                 long catPoisonous = DataManager.countAttributeCategories(data_partition, currentEnumClass, category, poisonous);
-                long catCount = catEdible + catPoisonous;
-                infoCurrAttribute = infoCurrAttribute + ((double) catCount / data_partition.size()) *
-                        (infoD(catEdible, catCount) + infoD(catPoisonous, catCount));
+                long catCountTotal = catEdible + catPoisonous;
+                infoCurrAttribute = infoCurrAttribute + ((double) catCountTotal / data_partition.size()) *
+                        (infoD(catEdible, catCountTotal) + infoD(catPoisonous, catCountTotal));
             }
             result.put(infoCurrAttribute, currentEnumClass);
         }
-        double minInfoD = Collections.min(result.keySet());
-        return result.get(minInfoD);
+        return result;
     }
 
-    public Node<Object> generateDecisionTree(Collection<Mushroom> data_partition, Collection<Object> attributeList) {
-        Node<Object> root;
-        if (attributeList.isEmpty() && eatableCount < poisonousCount || eatableCount == 0)
-            return new Node<>(poisonous, null);
-        if (attributeList.isEmpty() && eatableCount > poisonousCount || poisonousCount == 0)
-            return new Node<>(edible, null);
+    public Class selectBestAttribute(Map<Double, Class> attributes) {
+        double minInfoD = Collections.min(attributes.keySet());
+        return attributes.get(minInfoD);
+    }
 
-        Class splittingAttribute = attributeSelection(data_partition, attributeList);
-        Object[] categories = splittingAttribute.getEnumConstants();
-        root = new Node<>(splittingAttribute, null);
+    public Enum majority(int edibleCount, int poisonousCount) {
+        if (edibleCount > poisonousCount)
+            return edible;
+        return poisonous;
+    }
+
+    public Node<Object> generateDecisionTree(Collection<Mushroom> data_partitionD, Collection<Object> attributeList) {
+        Node<Object> node = new Node(null, null, null);
+        int edibleCount = DataManager.countAttributeCategories(data_partitionD, Class_Label.class, edible, edible);
+        int poisonousCount = DataManager.countAttributeCategories(data_partitionD, Class_Label.class, poisonous, poisonous);
+
+        if (attributeList.isEmpty() && poisonousCount > edibleCount || edibleCount == 0) {
+            //node.addLeaf(new Node<>(poisonous, node));
+            node = new Node(poisonous, null, null);
+            return node;
+        }
+        if (attributeList.isEmpty() && edibleCount > poisonousCount || poisonousCount == 0) {
+            //node.addLeaf(new Node<>(edible, node));
+            node = new Node(edible, null, null);
+            return node;
+        }
+
+        Object bestSplittingCriterion = selectBestAttribute(attributeSelection(data_partitionD, attributeList));  // class of ENUM
+        Object[] splittCritOutcomes = ((Class) bestSplittingCriterion).getEnumConstants();                   // ENUM attributes of best splitting criterion
+        node.setLabel(bestSplittingCriterion);
         /*for (Object category : categories)
-            root.addLeaf(new Node<>(category, root));*/
+            parent.addLeaf(new Node<>(category, parent));*/
         // TODO: 12.02.2018 if splittingCriterion is discrete-valued and multiway splits allowed
-        editedAttributeList.remove(splittingAttribute);
-        // for each outcome j of splittingCriterion
-        //      partition the tuples and grow subtrees for each partition
-        //      let Dj be the set of data tuples in D satisfying outcome j;   // a partition
-        // if Dj is empty then
-        // attach a leaf labeled with the majority class in D to node N;
-        // else root.addLeaf(generateDecisionTree(Dj, attributeList), root);
-        // end for
-        return root;
-    }
+        editedAttributeList.remove(bestSplittingCriterion);
 
+        for (Object outcome_j : splittCritOutcomes) {     // for each outcome j of splittingCriterion   .. almond, anise, creosote...
+            Collection<Mushroom> Dj = new ArrayList<>(DataManager.listAttributeCategories(data_partitionD, bestSplittingCriterion, outcome_j));  // for almond 211
+           // System.out.println(Dj.size() + " " + outcome_j);
+            if (Dj.size() <= 0) {            //let Dj be the set of data tuples in D satisfying outcome j;   // a partition
+                /*Node outcome = new Node(outcome_j, node);
+                outcome.addLeaf(new Node(null, outcome));*/
+                node.addLeaf(new Node(null, outcome_j, node));                                                              // if Dj is empty then
+            } else {
+                Node leaf = generateDecisionTree(Dj, editedAttributeList);
+                leaf.addParent(node);
+                leaf.setBranch(outcome_j);
+                node.addLeaf(leaf);   // else parent.addLeaf(generateDecisionTree(Dj, editedAttributeList));
+            }
+        }
+        return node;
+    }
 }
 
 @SuppressWarnings("unchecked")
 class Node<E> {
     private E label;
-    private Node<E> root;
+    private E branch;
+    private Node<E> parent;
     private Collection<Node<E>> leafs = new ArrayList<>();
 
-    Node(E element, Node<E> root) {
-        this.label = element;
-        this.root = root;
-
+    Node(E label, E branch, Node<E> parent) {
+        this.label = label;
+        this.branch = branch;
+        this.parent = parent;
     }
 
     public void addLeaf(Node<E> leaf) {
         this.leafs.add(leaf);
+    }
+
+    public void addParent(Node<E> parent) {
+        this.parent = parent;
+    }
+
+    public void setBranch(E branch) {
+        this.branch = branch;
+    }
+
+    public E getBranch() {
+        return branch;
     }
 
     public E getLabel() {
@@ -110,8 +156,12 @@ class Node<E> {
         return label;
     }
 
-    public Node<E> getRoot() {
-        return root;
+    public void setLabel(E label) {
+        this.label = label;
+    }
+
+    public Node<E> getParent() {
+        return parent;
     }
 
     public Collection<Node<E>> getLeaves() {
@@ -122,7 +172,9 @@ class Node<E> {
     public String toString() {
         return "Node{" +
                 "label = " + getLabel() +
-                ", parent = " + getRoot() +
+                ", branch = " + branch +
+                ", parent = " + getParent() +
+                ", leaf = " + leafs.size() +
                 '}';
     }
 }

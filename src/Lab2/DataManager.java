@@ -5,6 +5,8 @@ import Lab2.enums.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The Lab2.DataManager class is used to convert the string data loaded in from the text file
@@ -463,6 +465,14 @@ public class DataManager {
     public static int countAttributeCategories(Collection<Mushroom> Data, Object Attribute, Object AttributeValue, Object Classification) {
         return (int) Data.stream().filter(mushroom -> mushroom.getAttributeValue(Attribute).equals(AttributeValue) &&
                 mushroom.m_Class.equals(Classification)).count();
+    }
+
+    public static List<Mushroom> listAttributeCategories(Collection<Mushroom> Data, Object Attribute, Object AttributeValue, Object Classification) {
+        return Data.stream().filter(mushroom -> mushroom.getAttributeValue(Attribute).equals(AttributeValue) &&
+                mushroom.m_Class.equals(Classification)).collect(Collectors.toList());
+    }
+    public static List<Mushroom> listAttributeCategories(Collection<Mushroom> Data, Object Attribute, Object AttributeValue) {
+        return Data.stream().filter(mushroom -> mushroom.getAttributeValue(Attribute).equals(AttributeValue)).collect(Collectors.toList());
     }
 
 }
