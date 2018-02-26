@@ -39,6 +39,9 @@ public class KMeanTest {
         List<KMeanCluster> clusters = KMeans.KMeansPartition(3, list);
         clusters.forEach(System.out::println);
         org.junit.Assert.assertEquals("-----------------------------------CLUSTER START------------------------------------------\n" +
+                "Center:\n" +
+                "Iris Object --> | Sepal_Length = 0.0 | Sepal_Width = 0.0 | Petal_Length = 1.0 | Petal_Width = 1.0 | Class = Iris_setosa\n" +
+                "------------------------------------------------------------------------------------------\n" +
                 "Iris Object --> | Sepal_Length = 0.0 | Sepal_Width = 0.0 | Petal_Length = 1.0 | Petal_Width = 1.0 | Class = Iris_versicolor\n" +
                 "Iris Object --> | Sepal_Length = 0.0 | Sepal_Width = 0.0 | Petal_Length = 1.0 | Petal_Width = 1.0 | Class = Iris_virginica\n" +
                 "Iris Object --> | Sepal_Length = 0.0 | Sepal_Width = 0.0 | Petal_Length = 1.0 | Petal_Width = 1.0 | Class = Iris_setosa\n" +
@@ -46,14 +49,20 @@ public class KMeanTest {
                 "-----------------------------------CLUSTER END-------------------------------------------\n" +
                 "\n" +
                 "-----------------------------------CLUSTER START------------------------------------------\n" +
-                "Iris Object --> | Sepal_Length = 0.15 | Sepal_Width = 0.1 | Petal_Length = 1.0 | Petal_Width = 1.0 | Class = Iris_setosa\n" +
-                "Iris Object --> | Sepal_Length = 0.1 | Sepal_Width = 0.15 | Petal_Length = 1.0 | Petal_Width = 1.0 | Class = Iris_setosa\n" +
-                "-----------------------------------CLUSTER END-------------------------------------------\n" +
-                "\n" +
-                "-----------------------------------CLUSTER START------------------------------------------\n" +
+                "Center:\n" +
+                "Iris Object --> | Sepal_Length = 0.15 | Sepal_Width = 0.0 | Petal_Length = 1.0 | Petal_Width = 1.0 | Class = Iris_setosa\n" +
+                "------------------------------------------------------------------------------------------\n" +
                 "Iris Object --> | Sepal_Length = 0.1 | Sepal_Width = 0.0 | Petal_Length = 1.0 | Petal_Width = 1.0 | Class = Iris_setosa\n" +
                 "Iris Object --> | Sepal_Length = 0.15 | Sepal_Width = 0.0 | Petal_Length = 1.0 | Petal_Width = 1.0 | Class = Iris_versicolor\n" +
                 "Iris Object --> | Sepal_Length = 0.2 | Sepal_Width = 0.0 | Petal_Length = 1.0 | Petal_Width = 1.0 | Class = Iris_setosa\n" +
+                "-----------------------------------CLUSTER END-------------------------------------------\n" +
+                "\n" +
+                "-----------------------------------CLUSTER START------------------------------------------\n" +
+                "Center:\n" +
+                "Iris Object --> | Sepal_Length = 0.125 | Sepal_Width = 0.125 | Petal_Length = 1.0 | Petal_Width = 1.0 | Class = Iris_setosa\n" +
+                "------------------------------------------------------------------------------------------\n" +
+                "Iris Object --> | Sepal_Length = 0.15 | Sepal_Width = 0.1 | Petal_Length = 1.0 | Petal_Width = 1.0 | Class = Iris_setosa\n" +
+                "Iris Object --> | Sepal_Length = 0.1 | Sepal_Width = 0.15 | Petal_Length = 1.0 | Petal_Width = 1.0 | Class = Iris_setosa\n" +
                 "-----------------------------------CLUSTER END-------------------------------------------\n\n", record.stop().replaceAll("\r",""));
     }
 
