@@ -1,7 +1,9 @@
-package Lab4.data;
+package Lab4.Test;
 
 
-import Lab4.kMean.KMeanCluster;
+import Lab4.Utils.Cluster;
+import Lab4.data.Iris;
+import Lab4.data.IrisClass;
 import Lab4.kMean.KMeans;
 
 import java.util.ArrayList;
@@ -36,7 +38,7 @@ public class KMeanTest {
 
         list.add(new Iris(0.2f, 0.0f, 1.0f, 1.0f, IrisClass.Iris_setosa));
         record.start();
-        List<KMeanCluster> clusters = KMeans.KMeansPartition(3, list);
+        List<Cluster> clusters = KMeans.KMeansPartition(3, list);
         clusters.forEach(System.out::println);
         org.junit.Assert.assertEquals("-----------------------------------CLUSTER START------------------------------------------\n" +
                 "Center:\n" +

@@ -1,11 +1,9 @@
 package Lab4;
 
+import Lab4.Utils.Cluster;
 import Lab4.data.Iris;
 import Lab4.data.IrisClass;
-import Lab4.kMean.KMeanCluster;
-import Lab4.kMean.KMeans;
 import Lab4.kMedoid.KMedoid;
-import Lab4.kMedoid.KMedoidCluster;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +40,7 @@ public class Main1 {
         medoidList.add(new Iris(7f, 6f, 0f,0f, Iris_setosa));
 
 
-        List<KMedoidCluster> clusters = KMedoid.KMedoidPartition(2,medoidList);
+        List<Cluster> clusters = KMedoid.KMedoidPartition(2,medoidList);
         clusters.forEach(System.out::println);
     }
 }

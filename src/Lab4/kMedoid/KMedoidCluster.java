@@ -4,17 +4,12 @@ import Lab4.Utils.Cluster;
 import Lab4.data.Iris;
 
 public class KMedoidCluster extends Cluster {
-/*
-    public ArrayList<Iris> ClusterMembers;
-    public Iris Medoid;*/
-
-    /*public KMedoidCluster(Iris medoid) {
-        this.ClusterMembers = new ArrayList<>();
-        this.Medoid = medoid;
-    }*/
 
     public KMedoidCluster(Iris mainCluster) {
         super(mainCluster);
+    }
+
+    public KMedoidCluster() {
     }
 
     @Override

@@ -1,6 +1,7 @@
 package Lab2;
 
 import Lab2.enums.*;
+import common.CSVFileReader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * The Lab2.DataManager class is used to convert the string data loaded in from the text file
  * to Lab2.Mushroom objects.
- * The Lab2.DataManager class makes use of the Lab2.CSVFileReader class to accomplish this.
+ * The Lab2.DataManager class makes use of the Lab2.Main class to accomplish this.
  */
 public class DataManager {
 

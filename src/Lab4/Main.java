@@ -1,5 +1,6 @@
 package Lab4;
 
+import Lab4.Utils.Cluster;
 import Lab4.data.DataLoader;
 import Lab4.data.Iris;
 import Lab4.kMean.KMeanCluster;
@@ -20,12 +21,12 @@ public class Main {
         ArrayList<Iris> irisData = DataLoader.LoadAllIrisData();
 
         //Second step --> do the clustering using k-means!
-        ArrayList<KMeanCluster> FoundClusters_KMeans = KMeans.KMeansPartition(3, irisData);
-        FoundClusters_KMeans.forEach(System.out::println);
+        ArrayList<Cluster> FoundClusters_KMeans = KMeans.KMeansPartition(3, irisData);
+        //FoundClusters_KMeans.forEach(System.out::println);
 
         //Third step --> do the clustering using k-medoids!
-        ArrayList<KMedoidCluster> FoundClusters_KMedoids = KMedoid.KMedoidPartition(3, irisData);
-        //FoundClusters_KMedoids.forEach(System.out::println);
+        ArrayList<Cluster> FoundClusters_KMedoids = KMedoid.KMedoidPartition(3, irisData);
+        FoundClusters_KMedoids.forEach(System.out::println);
     }
 
 }
