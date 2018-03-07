@@ -2,10 +2,12 @@ package Lab2;
 
 import Lab2.enums.Class_Label;
 
+import javax.swing.tree.TreeNode;
 import java.util.*;
 
 import static Lab2.enums.Class_Label.edible;
 import static Lab2.enums.Class_Label.poisonous;
+import static javax.swing.tree.DefaultMutableTreeNode.EMPTY_ENUMERATION;
 
 @SuppressWarnings("unchecked")
 public class Algorithm {
@@ -24,6 +26,7 @@ public class Algorithm {
 
     /**
      * Entropy of D
+     *
      * @param caseOccurrence frequency of a case
      * @param allOccurrences all occurrences
      * @return entropy
@@ -106,7 +109,7 @@ public class Algorithm {
 
         for (Object outcome_j : splittCritOutcomes) {     // for each outcome j of splittingCriterion   .. almond, anise, creosote...
             Collection<Mushroom> Dj = new ArrayList<>(DataManager.listAttributeCategories(data_partitionD, bestSplittingCriterion, outcome_j));  // for almond 211
-           // System.out.println(Dj.size() + " " + outcome_j);
+            // System.out.println(Dj.size() + " " + outcome_j);
             if (Dj.size() <= 0) {            //let Dj be the set of data tuples in D satisfying outcome j;   // a partition
                 /*Node outcome = new Node(outcome_j, node);
                 outcome.addLeaf(new Node(null, outcome));*/
@@ -122,59 +125,3 @@ public class Algorithm {
     }
 }
 
-@SuppressWarnings("unchecked")
-class Node<E> {
-    private E label;
-    private E branch;
-    private Node<E> parent;
-    private Collection<Node<E>> leafs = new ArrayList<>();
-
-    Node(E label, E branch, Node<E> parent) {
-        this.label = label;
-        this.branch = branch;
-        this.parent = parent;
-    }
-
-    public void addLeaf(Node<E> leaf) {
-        this.leafs.add(leaf);
-    }
-
-    public void addParent(Node<E> parent) {
-        this.parent = parent;
-    }
-
-    public void setBranch(E branch) {
-        this.branch = branch;
-    }
-
-    public E getBranch() {
-        return branch;
-    }
-
-    public E getLabel() {
-        if (label instanceof Class) return (E) ((Class) label).getSimpleName();
-        return label;
-    }
-
-    public void setLabel(E label) {
-        this.label = label;
-    }
-
-    public Node<E> getParent() {
-        return parent;
-    }
-
-    public Collection<Node<E>> getLeaves() {
-        return leafs;
-    }
-
-    @Override
-    public String toString() {
-        return "Node{" +
-                "label = " + getLabel() +
-                ", branch = " + branch +
-                ", parent = " + getParent() +
-                ", leaf = " + leafs.size() +
-                '}';
-    }
-}

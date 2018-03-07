@@ -1,8 +1,8 @@
 package Lab2;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.Vector;
 
 import static Lab2.enums.Class_Label.edible;
 import static Lab2.enums.Class_Label.poisonous;
@@ -52,15 +52,16 @@ public class Main {
 
     public static <E> void printTree(Node<E> node, String offset) {
         System.out.printf("%s%s\n", offset, node.getLabel());
-        for (Node<E> leaf : node.getLeaves()) {
-            Object branchName = leaf.getBranch();
-            System.out.println("\t\t" + offset + branchName);
-            Collection leaves = leaf.getLeaves();
-            if (!leaves.isEmpty())
-                printTree(leaf, "\t\t\t\t" + offset);
-            else
-                System.out.println("\t\t\t\t" + offset + leaf.getLabel());
-        }
+        if (node.getLeaves() != null)
+            for (Node<E> leaf : node.getLeaves()) {
+                Object branchName = leaf.getBranch();
+                System.out.println("\t\t" + offset + branchName);
+                Vector leaves = leaf.getLeaves();
+                if (leaves == null || !leaves.isEmpty())
+                    printTree(leaf, "\t\t\t\t" + offset);
+                else
+                    System.out.println("\t\t\t\t" + offset + leaf.getLabel());
+            }
     }
 
 }
