@@ -72,18 +72,19 @@ public class DataManager {
     }
 
     private static Cap_Shape loadCapShape(String cap_shape) {
-        if (cap_shape.equals("b")) {
-            return Cap_Shape.bell;
-        } else if (cap_shape.equals("c")) {
-            return Cap_Shape.conical;
-        } else if (cap_shape.equals("x")) {
-            return Cap_Shape.convex;
-        } else if (cap_shape.equals("f")) {
-            return Cap_Shape.flat;
-        } else if (cap_shape.equals("k")) {
-            return Cap_Shape.knobbed;
-        } else if (cap_shape.equals("s")) {
-            return Cap_Shape.sunken;
+        switch (cap_shape) {
+            case "b":
+                return Cap_Shape.bell;
+            case "c":
+                return Cap_Shape.conical;
+            case "x":
+                return Cap_Shape.convex;
+            case "f":
+                return Cap_Shape.flat;
+            case "k":
+                return Cap_Shape.knobbed;
+            case "s":
+                return Cap_Shape.sunken;
         }
 
         return null; //INtentional, if we get down here something went wrong.

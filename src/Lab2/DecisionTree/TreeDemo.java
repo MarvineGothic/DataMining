@@ -8,7 +8,6 @@ import Lab2.Node;
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 import java.util.ArrayList;
@@ -24,8 +23,8 @@ public class TreeDemo extends JPanel implements TreeSelectionListener {
         List<Object> attributeList = Mushroom.getAttributeList();
         Algorithm id3 = new Algorithm(mushrooms);
         //Create the nodes.
-        Node<Object> top = new Node<>("Mushrooms", null, null);
-        top.addLeaf(id3.generateDecisionTree(mushrooms, attributeList));
+        Node<Object> top = id3.generateDecisionTree(mushrooms, attributeList);
+        top.setLabel("Mushrooms");
         //Create a tree that allows one selection at a time.
         JTree tree = new JTree(top);
         tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
@@ -37,21 +36,21 @@ public class TreeDemo extends JPanel implements TreeSelectionListener {
         JScrollPane treeView = new JScrollPane(tree);
 
         //Create the HTML viewing pane.
-        JEditorPane htmlPane = new JEditorPane();
-        htmlPane.setEditable(false);
+        //JEditorPane htmlPane = new JEditorPane();
+        //htmlPane.setEditable(false);
         //  initHelp();
-        JScrollPane htmlView = new JScrollPane(htmlPane);
+        //JScrollPane htmlView = new JScrollPane(htmlPane);
 
         //Add the scroll panes to a split pane.
         JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
         splitPane.setTopComponent(treeView);
-        splitPane.setBottomComponent(htmlView);
+        //splitPane.setBottomComponent(htmlView);
 
-        Dimension minimumSize = new Dimension(100, 50);
-        htmlView.setMinimumSize(minimumSize);
+        Dimension minimumSize = new Dimension(500, 500);
+        //htmlView.setMinimumSize(minimumSize);
         treeView.setMinimumSize(minimumSize);
-        splitPane.setDividerLocation(100);
-        splitPane.setPreferredSize(new Dimension(500, 300));
+        //splitPane.setDividerLocation(100);
+        splitPane.setPreferredSize(new Dimension(500, 600));
 
         //Add the split pane to this panel.
         add(splitPane);
@@ -75,7 +74,7 @@ public class TreeDemo extends JPanel implements TreeSelectionListener {
         //Create and set up the window.
         JFrame frame = new JFrame("TreeDemo");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
+        frame.setLocationRelativeTo(null);
         //Add content to the window.
         frame.add(new TreeDemo());
 

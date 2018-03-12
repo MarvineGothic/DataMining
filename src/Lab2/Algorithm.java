@@ -2,12 +2,10 @@ package Lab2;
 
 import Lab2.enums.Class_Label;
 
-import javax.swing.tree.TreeNode;
 import java.util.*;
 
 import static Lab2.enums.Class_Label.edible;
 import static Lab2.enums.Class_Label.poisonous;
-import static javax.swing.tree.DefaultMutableTreeNode.EMPTY_ENUMERATION;
 
 @SuppressWarnings("unchecked")
 public class Algorithm {
@@ -89,13 +87,13 @@ public class Algorithm {
         int poisonousCount = DataManager.countAttributeCategories(data_partitionD, Class_Label.class, poisonous, poisonous);
 
         if (attributeList.isEmpty() && poisonousCount > edibleCount || edibleCount == 0) {
-            //node.addLeaf(new Node<>(poisonous, node));
-            node = new Node(poisonous, null, null);
+            node.addLeaf(new Node<>(poisonous, node, null));
+            //node = new Node(poisonous, null, null);
             return node;
         }
         if (attributeList.isEmpty() && edibleCount > poisonousCount || poisonousCount == 0) {
-            //node.addLeaf(new Node<>(edible, node));
-            node = new Node(edible, null, null);
+            node.addLeaf(new Node<>(edible, node, null));
+            //node = new Node(edible, null, null);
             return node;
         }
 
@@ -113,11 +111,14 @@ public class Algorithm {
             if (Dj.size() <= 0) {            //let Dj be the set of data tuples in D satisfying outcome j;   // a partition
                 /*Node outcome = new Node(outcome_j, node);
                 outcome.addLeaf(new Node(null, outcome));*/
-                node.addLeaf(new Node(null, outcome_j, node));                                                              // if Dj is empty then
+                Node endNode = new Node(node + ":" + outcome_j, outcome_j, node);
+                endNode.addLeaf(new Node("no info", null, null));
+                node.addLeaf(endNode);                                                              // if Dj is empty then
             } else {
                 Node leaf = generateDecisionTree(Dj, editedAttributeList);
                 leaf.addParent(node);
-                leaf.setBranch(outcome_j);
+                leaf.setLabel(node + ":" + outcome_j);
+                //leaf.setBranch(outcome_j);
                 node.addLeaf(leaf);   // else parent.addLeaf(generateDecisionTree(Dj, editedAttributeList));
             }
         }

@@ -107,7 +107,8 @@ public class CU {
     public static List<Double> sortDigitsOut(Object[][] data,int column, String regex) {
         List<Double> listProcessed = new ArrayList<>();
         for (int i = 1; i < data.length; i++) {
-            String line = ((String) data[i][column]).replaceAll("\\s+\\D+", "");
+            String line = ((String) data[i][column]).replaceAll("\\s+\\D+", "")
+                    .replaceAll(",",".");
             if (line.matches(regex))
                 listProcessed.add(Double.valueOf(line));
         }

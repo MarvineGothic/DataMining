@@ -113,6 +113,6 @@ public class Node<E> implements TreeNode {
     }*/
     @Override
     public String toString() {
-        return getBranch() + "" + getLabel();
+        return getLabel()+"";
     }
 }

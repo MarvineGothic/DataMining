@@ -1,32 +1,32 @@
 package Assignment_Questionnaire;
 
 import Assignment_Questionnaire.enums.*;
+import Assignment_Questionnaire.enums.Number;
 
-import java.lang.Number;
 import java.util.ArrayList;
 
 public class Student {
-    private String timestamp;                                                            //n
-    private Age s_age;                                                                   //y
-    private Gender s_gender;                                                             //y
-    private ShoeSize s_shoeSize;                                                         //y
-    private Height s_height;                                                             //y
-    private Degree s_degree;                                                             //y
-    private String reasonTakingCourse;                                                   //yn
-    private String[] programmingLanguages;                                               //yn
-    private PhoneOS s_phoneOS;                                                           //yn
-    private Topics[] s_topics;                                                           //n
-    private String[] gamesPlayed;                                                        //yn
-    private String[] commuteToITU;                                                       //n
-    private String[] traverseITU = new String[15];                                       //n
-    private String[] fourNumbers; //n
-    private String therb;         //n
-    private String number;        //n
-    private String favFilm;       //n
-    private String favTVshow;     //n
-    private String favGame;       //n
-    private String row;           //y
-    private String seat;          //y
+    public TimeStamp s_timeStamp;                                                        //n
+    public Age s_age;                                                                   //y
+    public Gender s_gender;                                                             //y
+    public ShoeSize s_shoeSize;                                                         //y
+    public Height s_height;                                                             //y
+    public Degree s_degree;                                                             //y
+    public ReasonTakeCourse s_reasonTakingCourse;                                       //yn
+    public ProgrammingLanguage[] s_programmingLanguages;                                  //yn
+    public PhoneOS s_phoneOS;                                                           //yn
+    public Topics[] s_topics;                                                           //n
+    public GamesPlayed[] gamesPlayed;                                                   //yn
+    public CommuteToITU[] commuteToITU;                                                  //n
+    public TraverseITU[] traverseITU;                                                    //n
+    public FourNumbers[] fourNumbers;                                                   //n
+    public Therb therb;                                                                 //n
+    public Number number;                                                                //n
+    public Film favFilm;                                                                 //n
+    public TVShow favTVshow;                                                            //n
+    public Game favGame;                                                                 //n
+    public Row row;                                                                      //y
+    public Seat seat;                                                                     //y
 
     public ArrayList<Object> getAttributeList() {
         ArrayList<Object> attributeList = new ArrayList<>();

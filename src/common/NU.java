@@ -1,5 +1,8 @@
 package common;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 /**
  * Normalization Utility Class
  */
@@ -16,5 +19,13 @@ public class NU {
         int maxAbs = Math.max(Math.abs(min), Math.abs(max));
         int dec = maxAbs == 0 ? 10 : ((int) Math.pow(10, ((int) Math.log10(maxAbs) + 1)));
         return (double) value / dec;
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }

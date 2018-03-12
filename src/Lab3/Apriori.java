@@ -100,7 +100,7 @@ public class Apriori {
     }
 
     /**
-     * Simple join of two ItemSet without duplicates
+     * NeuralNetwork.Simple join of two ItemSet without duplicates
      *
      * @param first  ItemSet
      * @param second ItemSet
