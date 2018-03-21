@@ -1,4 +1,4 @@
 package Assignment_Questionnaire.enums;
 
-public class Row {
+public enum Row {
 }

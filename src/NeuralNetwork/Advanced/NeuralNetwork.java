@@ -1,10 +1,13 @@
 package NeuralNetwork.Advanced;
 
-import NeuralNetwork.Advanced.Entity.Result;
 import NeuralNetwork.Advanced.Entity.Error;
-import NeuralNetwork.Advanced.exception.*;
+import NeuralNetwork.Advanced.Entity.Result;
 import NeuralNetwork.Advanced.Utils.Utils;
 import NeuralNetwork.Advanced.callback.INeuralNetworkCallback;
+import NeuralNetwork.Advanced.exception.NotSameInputOutputSizeException;
+import NeuralNetwork.Advanced.exception.ZeroInputDimensionException;
+import NeuralNetwork.Advanced.exception.ZeroInputElementsException;
+import NeuralNetwork.Advanced.exception.ZeroNeuronsException;
 import NeuralNetwork.Advanced.result.BinaryResultParser;
 import NeuralNetwork.Advanced.result.IResultParser;
 import NeuralNetwork.Advanced.transfer.ITransferFunction;
@@ -13,6 +16,7 @@ import NeuralNetwork.Advanced.transfer.SigmoidFunction;
 /**
  * https://github.com/jlmd/SimpleNeuralNetwork
  * Engine of neural network. This class do all necessary work to learn from input and output data and generate a result
+ *
  * @author jlmd
  */
 public class NeuralNetwork {
@@ -36,7 +40,7 @@ public class NeuralNetwork {
 
     private INeuralNetworkCallback neuralNetworkCallback = null;
 
-    public NeuralNetwork (float[][] inputs, int[] output, INeuralNetworkCallback neuralNetworkCallback) {
+    public NeuralNetwork(float[][] inputs, int[] output, INeuralNetworkCallback neuralNetworkCallback) {
         bOut = Utils.randFloat(-0.5f, 0.5f);
         this.neuralNetworkCallback = neuralNetworkCallback;
         // Default transfer function
@@ -50,7 +54,7 @@ public class NeuralNetwork {
         this.nElements = output.length;
         try {
             this.dimension = inputs[0].length;
-        } catch (ArrayIndexOutOfBoundsException e){
+        } catch (ArrayIndexOutOfBoundsException e) {
             neuralNetworkCallback.failure(Error.ZERO_INPUT_ELEMENTS);
         }
 
@@ -62,14 +66,14 @@ public class NeuralNetwork {
      * Starts a asynchronous thread for do all neural network work
      * Calls a callback on finished
      */
-    public void startLearning(){
+    public void startLearning() {
         try {
             if (inputs.length != outputs.length)
                 throw new NotSameInputOutputSizeException();
             if (inputs.length == 0)
                 throw new ZeroInputElementsException();
 
-            HiddenLayerNeuron hiddenLayerNeuron = new HiddenLayerNeuron (neurons, dimension);
+            HiddenLayerNeuron hiddenLayerNeuron = new HiddenLayerNeuron(neurons, dimension);
             bias = hiddenLayerNeuron.getBias();
             vWeights = hiddenLayerNeuron.getVWeights();
             wWeights = hiddenLayerNeuron.getWWeights();
@@ -89,18 +93,19 @@ public class NeuralNetwork {
 
     /**
      * Get a row of inputs elements
+     *
      * @param row Row to obtain
      * @return obtained row
      */
-    private float[] getRowElements(int row){
+    private float[] getRowElements(int row) {
         float[] elements = new float[dimension];
-        for (int i = 0; i<dimension; i++){
+        for (int i = 0; i < dimension; i++) {
             elements[i] = this.inputs[row][i];
         }
         return elements;
     }
 
-    public void setTransferFunction(ITransferFunction transferFunction){
+    public void setTransferFunction(ITransferFunction transferFunction) {
         this.transferFunction = transferFunction;
     }
 
@@ -134,13 +139,13 @@ public class NeuralNetwork {
             float quadraticError = 0;
             float[] f;
             int success = 0;
-            for (int i = 0; i<iterationsLimit; i++) {
+            for (int i = 0; i < iterationsLimit; i++) {
                 success = 0;
-                for (int z = 0; z<nElements; z++) {
-                    analyzer = new Analyzer (getRowElements(z), wWeights, bias, vWeights, bOut, neurons, transferFunction, dimension);
+                for (int z = 0; z < nElements; z++) {
+                    analyzer = new Analyzer(getRowElements(z), wWeights, bias, vWeights, bOut, neurons, transferFunction, dimension);
                     f = analyzer.getFOutArray();
                     fOut = analyzer.getFOut();
-                    learner = new Learner (outputs[z], fOut, f, vWeights, wWeights, bias, bOut, neurons, getRowElements(z), dimension);
+                    learner = new Learner(outputs[z], fOut, f, vWeights, wWeights, bias, bOut, neurons, getRowElements(z), dimension);
                     vWeights = learner.getVWeights();
                     wWeights = learner.getWWeights();
                     bias = learner.getBias();
@@ -150,7 +155,7 @@ public class NeuralNetwork {
                 }
                 quadraticError *= 0.5f;
             }
-            float successPercentage = (success / (float)nElements) * 100;
+            float successPercentage = (success / (float) nElements) * 100;
             Result result = new Result(analyzer, resultParser, successPercentage, quadraticError);
             neuralNetworkCallback.success(result);
         }

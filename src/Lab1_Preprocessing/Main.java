@@ -2,15 +2,11 @@ package Lab1_Preprocessing;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
-import static common.CSVFileReader.readDataFile;
-import static common.CU.*;
+import static Assignment_Questionnaire.Library.CSVFileReader.readDataFile;
 
 /**
- * The Lab2.Main class is used to load a csv file
+ * The Lab2_ID3.Main class is used to load a csv file
  */
 public class Main {
 
@@ -68,15 +64,5 @@ public class Main {
         return meanD(ageProcessed);
     }*/
 
-    public static double processAttribute(String[][] data, String regex, int column) {
-        HashMap<String, List<String>> attribute = new HashMap<>();
-        List<Double> attributeProcessed = new ArrayList<>();
-        String attributeTitle = data[0][column];
-        attribute.put(attributeTitle, new ArrayList<>());
-        for (int i = 1; i < data.length; i++)
-            attribute.get(attributeTitle).add(data[i][1]);
-        attributeProcessed.addAll(sortDigitsOut(data, column, regex));
-        removeTwoPercent(attributeProcessed);
-        return meanD(attributeProcessed);
-    }
+
 }

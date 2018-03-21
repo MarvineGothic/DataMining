@@ -9,12 +9,6 @@ public enum ReasonTakeCourse {
     ReasonTakeCourse(String reason) {
         this.reason = reason;
     }
-    public  boolean equalsName(String other){
-        return reason.equals(other);
-    }
-    public String toString(){
-        return this.reason;
-    }
 
     public static ReasonTakeCourse fromString(String text) {
         for (ReasonTakeCourse b : ReasonTakeCourse.values()) {
@@ -23,5 +17,13 @@ public enum ReasonTakeCourse {
             }
         }
         return null;
+    }
+
+    public boolean equalsName(String other) {
+        return reason.equals(other);
+    }
+
+    public String toString() {
+        return String.format("Why did you take this course - %s", this.reason);
     }
 }

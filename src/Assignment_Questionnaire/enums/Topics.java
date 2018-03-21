@@ -17,10 +17,12 @@ public enum Topics {
     Topics(String topicName) {
         this.topicName = topicName;
     }
-    public boolean equalsName(String other){
+
+    public boolean equalsName(String other) {
         return topicName.equals(other);
     }
-    public String toString(){
+
+    public String toString() {
         return this.topicName;
     }
 }

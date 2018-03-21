@@ -1,13 +1,13 @@
 package NeuralNetwork.Simple;
 
-import Lab4.data.DataLoader;
-import Lab4.data.Iris;
-import Lab4.data.IrisClass;
+import Lab4_KMean.data.DataLoader;
+import Lab4_KMean.data.Iris;
+import Lab4_KMean.data.IrisClass;
 
 import java.util.ArrayList;
 
 import static NeuralNetwork.Simple.Perceptron.*;
-import static common.NU.round;
+import static Assignment_Questionnaire.Library.NU.round;
 
 public class Driver {
     public static void main(String[] args) {
