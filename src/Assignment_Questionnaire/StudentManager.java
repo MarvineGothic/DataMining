@@ -26,6 +26,7 @@ public class StudentManager {
     private static String[][] data;
     private static ArrayList<Student> students;
     private static int maxGamesNumber;
+    private static int maxFavGames;
 
     // test method
     public static void main(String[] args) {
@@ -87,6 +88,7 @@ public class StudentManager {
         double meanShoeSize = processAttribute(data, "\\d{2}(?:\\.?\\d*)?", 3);
         double meanHeight = processAttribute(data, "\\d{3}(?:\\.?\\d*)?", 4);
         maxGamesNumber = 0;
+        maxFavGames = 0;
 
         for (int i = 1; i < data.length; i++) {
             Student student = new Student();
@@ -126,6 +128,7 @@ public class StudentManager {
             student.s_favFilm = loadFavorite(Film.class, data[i][40]);
             student.s_favTVshow = loadFavorite(TVShow.class, data[i][41]);
             student.s_favGame = loadFavorite(Game.class, data[i][42]);
+            maxFavGames = student.s_favGame.length > maxFavGames ? student.s_favGame.length : maxFavGames;
             student.s_row = loadRow(data[i][43]);
             student.s_seat = loadSeat(data[i][44]);
             students.add(student);
@@ -368,6 +371,9 @@ public class StudentManager {
         return maxGamesNumber;
     }
 
+    public static int maxFavGames() {
+        return maxFavGames;
+    }
 
     /**
      * Method which might be helpful for calculating information gain. Counts the number of

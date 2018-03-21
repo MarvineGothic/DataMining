@@ -32,7 +32,8 @@ public class Main {
         associationRules(confidenceLimit, definingClass, definedClass);
 
         // Clustering KMean
-        KMeansPartition(6, createClusterData(students, GamesPlayed.class), true);
+        KMeansPartition(3, createClusterData(students, GamesPlayed.class,/* Topic_DED.class, Topic_CDMA.class,
+                Topic_CPM.class, Topic_DGS.class, Topic_SPG.class, Topic_SPI.class,*/ Game.class), true);
 
         //FoundClusters_KMeans.forEach(k -> System.out.println(k.getMainCluster()));
     }

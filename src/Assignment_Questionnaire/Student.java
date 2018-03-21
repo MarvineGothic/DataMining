@@ -4,9 +4,15 @@ import Assignment_Questionnaire.enums.*;
 import Assignment_Questionnaire.enums.Number;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static Assignment_Questionnaire.Library.RU.getMethod;
+import static Assignment_Questionnaire.Library.RU.getValueByName;
+
+@SuppressWarnings("all")
 public class Student {
     public TimeStamp s_timeStamp;                                                        //n
     public Age s_age;                                                                   //y
@@ -97,35 +103,27 @@ public class Student {
                 break;
             }
         }
-        return getValueByName(field);
+        return getValueByName(field, this);
     }
-
-    public Object getValueByName(String field) {
-        Object value = null;
-        try {
-            value = (this.getClass().getField(field).get(this));
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-            value = null;
-        }
-        return value;
-    }
-
-    public void getMethod(String methodName) {
-
-    }
-
+    /**
+     * Method to get double value from Student class attributes
+     * to normalize it afterwards and use in clustering
+     *
+     * @param name
+     * @return
+     */
     public double getAnyAttribute(String name) {
-        int length = 0;
+        double length = 0;
         Object object = this.getAttributeValue(name);
-        if (object.getClass().isArray()) {
+        Class clazz = object.getClass();
+        if (clazz.isArray()) {
             length = ((Object[]) object).length;
-            return Arrays.toString((Object[]) object).contains("I have not played any of these games") ? 0 : length;
+            return Arrays.toString((Object[]) object).matches("\\[I have not played any of these games]|\\[NONE]") ? 0 : length;
+        }
+        // handling all topics
+        if (clazz.getSimpleName().contains("Topic_")) {
+            return (int) getMethod("getRate", object);
         }
         return length;
     }
-
-    /*public double normalizeGamesPlayed() {
-        return Normalize.gamesPlayed(this.getGamesPlayed());
-    }*/
 }
