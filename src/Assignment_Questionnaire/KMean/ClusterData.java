@@ -12,7 +12,7 @@ public class ClusterData {
     private static ArrayList<ClusterObject> clusterObjects;
 
     public static void main(String[] args) {
-
+        String path = "/data/Data Mining - Spring 2018.csv";
         ArrayList<Student> students = getStudents();
         printClusterData(students);
 
@@ -41,6 +41,7 @@ public class ClusterData {
 
     /**
      * Method printing out cluster data
+     *
      * @param list
      */
     public static void printClusterData(ArrayList<Student> list) {

@@ -23,6 +23,7 @@ import static Assignment_Questionnaire.Library.DynamicEnum.addEnum;
  */
 @SuppressWarnings("all")
 public class StudentManager {
+    private static String path;
     private static String[][] data;
     private static ArrayList<Student> students;
     private static int maxGamesNumber;
@@ -35,7 +36,11 @@ public class StudentManager {
 
     public static void printStudentData() {
         System.out.printf("Student database:\n");
-        if (data == null) loadData();
+        if (data == null) try {
+            loadData(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String format = "%-32s %-5s %-8s %-10s %-7s %-15s %-40.35s %-88s %-10s %-30s %-30s %-30s %-30s %-30s %-30s " +
                 "%-30s %-30s %-30s %-30s %-30s %-250s %-35s %-220s %-35s %-15s %-15s %-60s %-60s %-60s %-15s %-10s\n";
         String header = String.format(format, "Timestamp", "Age", "Gender", "ShoeSize", "Height", "Degree", "Why are you taking this course?",
@@ -61,12 +66,13 @@ public class StudentManager {
         System.out.println("\n\n\n");
     }
 
-    public static void loadData() {
-        try {
-            data = readDataFile("data/Data Mining - Spring 2018.csv", "\",\"", "-", false);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public static void loadData (String path) throws IOException{
+        //try {
+            data = readDataFile(/*System.getProperty("user.dir") + */path, "\",\"", "-", false);
+            path = path;
+        //} catch (IOException e) {
+        //    e.printStackTrace();
+        //}
     }
 
     public static double processAttribute(String[][] data, String regex, int column) {
@@ -81,8 +87,12 @@ public class StudentManager {
         return meanD(attributeProcessed);
     }
 
-    public static ArrayList<Student> loadStudents() {
-        if (data == null) loadData();
+    public static ArrayList<Student> loadStudents() /*throws ArrayIndexOutOfBoundsException*/{
+        if (data == null) try {
+            loadData(path);
+        } catch (IOException e) {
+            System.out.println("Path is empty");
+        }
         students = new ArrayList<>();
         double meanAge = processAttribute(data, "\\d{2}", 1);
         double meanShoeSize = processAttribute(data, "\\d{2}(?:\\.?\\d*)?", 3);
@@ -376,7 +386,11 @@ public class StudentManager {
     }
 
     public static String[][] getData() {
-        if (data == null) loadData();
+        if (data == null) try {
+            loadData(path);
+        } catch (IOException e) {
+            System.out.println("Path is empty");
+        }
         return data;
     }
 
@@ -404,7 +418,6 @@ public class StudentManager {
      * @param Classification
      * @return
      */
-    // TODO: 24.03.2018 delete used attribute for an array
     public static int countAttributeCategories(Collection<Student> Data, Object Attribute, Object AttributeValue, Object mainClass, Object Classification) {
         return (int) Data.stream().filter(student -> {
             if (student.getAttributeValue(mainClass).equals(Classification)) {

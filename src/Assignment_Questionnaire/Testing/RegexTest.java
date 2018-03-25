@@ -46,6 +46,7 @@ public class RegexTest {
 
     public static void test03() {
         // id3
+        String path = "/data/Data Mining - Spring 2018.csv";
         ArrayList<Student> students = getStudents();
         Object classValue = students.get(0).getAttributeValue(Game.class);
         Object[] values = Game.values();

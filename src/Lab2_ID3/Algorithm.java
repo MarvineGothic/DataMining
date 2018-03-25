@@ -1,7 +1,8 @@
 package Lab2_ID3;
 
-import Lab2_ID3.enums.Class_Label;
 
+import Lab2_ID3.enums.Class_Label;
+import Assignment_Questionnaire.ID3.Node;
 import java.util.*;
 
 import static Lab2_ID3.enums.Class_Label.edible;

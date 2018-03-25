@@ -1,6 +1,6 @@
 package Assignment_Questionnaire.DecisionTree;
 
-import Lab2_ID3.Node;
+import Assignment_Questionnaire.ID3.Node;
 
 import javax.swing.*;
 import javax.swing.event.TreeSelectionEvent;
@@ -59,7 +59,7 @@ public class DecisionTree extends JPanel implements TreeSelectionListener {
 
         //Create and set up the window.
         JFrame frame = new JFrame("DecisionTree");
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        //frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setLocationRelativeTo(null);
         //Add content to the window.
         frame.add(new DecisionTree(top, label));

@@ -23,12 +23,12 @@ public class Apriori {
     public static void main(String[] args) {
         final int supportThreshold = 5;
         final double confidenceLimit = 90;
-
+        String path = "/data/Data Mining - Spring 2018.csv";
         ArrayList<Student> students = loadStudents();
         createTransactions(students, Degree.class, ReasonTakeCourse.class,
                 Topic_DED.class, Topic_SPS.class, Topic_UDMT.class, Topic_CDMA.class, Topic_CPM.class);
         apriori(supportThreshold, false);
-        associationRules(confidenceLimit,  null,Degree.class);
+        associationRules(confidenceLimit, null, Degree.class);
     }
 
     /**
