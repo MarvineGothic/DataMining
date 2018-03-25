@@ -49,7 +49,7 @@ public class StudentManager {
         System.out.println();
         for (Student s : loadStudents()) {
             System.out.printf(format,
-                    s.s_timeStamp, s.s_age, s.s_gender, s.s_shoeSize, s.s_height, s.s_degree, s.s_reasonTakingCourse,
+                    s.s_timeStamp, s.s_age, s.s_gender, s.s_shoeSize, s.s_height, s.s_degree, s.s_reasonTakingCourse.getName(),
                     Arrays.toString(s.s_programmingLanguages), s.s_phoneOS,
                     s.s_topicDED.getName(), s.s_topicCPM.getName(), s.s_topicDGS.getName(), s.s_topicVD.getName(), s.s_topicSPS.getName(),
                     s.s_topicSPSQ.getName(), s.s_topicSPG.getName(), s.s_topicSPT.getName(), s.s_topicSPI.getName(), s.s_topicCDMA.getName(),
@@ -313,16 +313,17 @@ public class StudentManager {
         return Number.fromString(number);
     }
 
-    public static <T extends Enum<?>> T[] loadFavorite(Class<T> tClass, String game) {
-        String[] showArray = game.trim().split(",");
-        T[] enums = null;
-        if (tClass == Game.class) enums = (T[]) new Game[showArray.length];
-        else if (tClass == TVShow.class) enums = (T[]) new TVShow[showArray.length];
-        else if (tClass == Film.class) enums = (T[]) new Film[showArray.length];
+    public static <T extends Enum<?>> T[] loadFavorite(Class<T> tClass, String fav) {
 
-        for (int i = 0; i < showArray.length; i++) {
-            String show = showArray[i].trim().toUpperCase();
-            if (show.matches("-|N/A|NON")) show = "NONE";
+        String[] favArray = fav.replaceAll("\\(\\w*\\)", "").trim().split(",");
+        T[] enums = null;
+        if (tClass == Game.class) enums = (T[]) new Game[favArray.length];
+        else if (tClass == TVShow.class) enums = (T[]) new TVShow[favArray.length];
+        else if (tClass == Film.class) enums = (T[]) new Film[favArray.length];
+
+        for (int i = 0; i < favArray.length; i++) {
+            String show = favArray[i].trim().toUpperCase();
+            show = cleanFavorites(show);
             try {
                 Enum.valueOf((Class) tClass, show);
             } catch (IllegalArgumentException e) {
@@ -333,6 +334,23 @@ public class StudentManager {
             }
         }
         return enums;
+    }
+
+    /**
+     * Helping method to clean names of favorite films, games and TVshows
+     * Used in loadFavorite() method
+     *
+     * @param fav a String that has to be cleaned
+     * @return cleaned String
+     */
+    private static String cleanFavorites(String fav) {
+        if (fav.matches("-|N/A|NON")) return "NONE";
+        if (fav.matches("GAM(\\w+)?\\s+OF\\s+THRON\\w+")) return "GAME OF THRONES";
+        if (fav.matches("ST(\\w+)?GER\\s+THINGS")) return "STRANGER THINGS";
+        if (fav.matches("WARCRAFT\\s*.*|WOW")) return "WORLD OF WARCRAFT";
+        if (fav.matches("CALL OF DUTY\\s*.*")) return "CALL OF DUTY";
+        if (fav.matches("CS\\s*GO")) return "COUNTERSTRIKE";
+        return fav.replaceAll("(?!,)\\p{Punct}|\\d+.*", "").trim();
     }
 
     public static Row loadRow(String row) {
@@ -386,17 +404,37 @@ public class StudentManager {
      * @param Classification
      * @return
      */
+    // TODO: 24.03.2018 delete used attribute for an array
     public static int countAttributeCategories(Collection<Student> Data, Object Attribute, Object AttributeValue, Object mainClass, Object Classification) {
-        return (int) Data.stream().filter(student -> student.getAttributeValue(Attribute).equals(AttributeValue) &&
-                mainClass.equals(Classification)).count();
+        return (int) Data.stream().filter(student -> {
+            if (student.getAttributeValue(mainClass).equals(Classification)) {
+                return innerFunction(student, Attribute, AttributeValue);
+            }
+            return false;
+        }).count();
     }
 
     public static List<Student> listAttributeCategories(Collection<Student> Data, Object Attribute, Object AttributeValue, Object mainClass, Object Classification) {
-        return Data.stream().filter(student -> student.getAttributeValue(Attribute).equals(AttributeValue) &&
-                mainClass.equals(Classification)).collect(Collectors.toList());
+        return Data.stream().filter(student -> {
+            if (student.getAttributeValue(mainClass).equals(Classification)) {
+                return innerFunction(student, Attribute, AttributeValue);
+            }
+            return false;
+        }).collect(Collectors.toList());
     }
 
     public static List<Student> listAttributeCategories(Collection<Student> Data, Object Attribute, Object AttributeValue) {
-        return Data.stream().filter(student -> student.getAttributeValue(Attribute).equals(AttributeValue)).collect(Collectors.toList());
+        return Data.stream().filter(student -> innerFunction(student, Attribute, AttributeValue)).collect(Collectors.toList());
+    }
+
+    private static boolean innerFunction(Object student, Object Attribute, Object AttributeValue) {
+        Object object = ((Student) student).getAttributeValue(Attribute);
+        if (object.getClass().isArray())
+            for (int i = 0; i < ((Object[]) object).length; i++) {
+                if (((Object[]) object)[i].equals(AttributeValue))
+                    return true;
+            }
+        if (object.equals(AttributeValue)) return true;
+        return false;
     }
 }

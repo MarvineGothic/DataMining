@@ -7,6 +7,15 @@ import java.math.RoundingMode;
  * Normalization Utility Class
  */
 public class NU {
+    /**
+     * MinMax normalization method
+     * @param vi
+     * @param mina
+     * @param maxa
+     * @param newMina
+     * @param newMaxa
+     * @return
+     */
     public static double minMax(double vi, double mina, double maxa, double newMina, double newMaxa) {
         return newMina + (vi - mina) * (newMaxa - newMina) / (maxa - mina);
     }

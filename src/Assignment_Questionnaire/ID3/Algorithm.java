@@ -1,49 +1,86 @@
 package Assignment_Questionnaire.ID3;
 
 import Assignment_Questionnaire.Student;
-import Assignment_Questionnaire.enums.Degree;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static Assignment_Questionnaire.StudentManager.countAttributeCategories;
 import static Assignment_Questionnaire.StudentManager.listAttributeCategories;
-import static Lab2_ID3.enums.Class_Label.edible;
-import static Lab2_ID3.enums.Class_Label.poisonous;
 
 
 @SuppressWarnings("unchecked")
 public class Algorithm {
-    //private int edibleCount = 0;
-    //private int poisonousCount = 0;
-    private Collection<Student> dataPartition;
-    private Collection<Object> editedAttributeList;
-
+    private static Collection<Student> data_partition;
 
     public Algorithm(Collection<Student> dataPartition) {
-        this.dataPartition = dataPartition;
-        this.editedAttributeList = Student.getAttributeList();
-        //this.edibleCount = DataManager.countAttributeCategories(dataPartition, Class_Label.class, edible, edible);
-        //this.poisonousCount = DataManager.countAttributeCategories(dataPartition, Class_Label.class, poisonous, poisonous);
+        data_partition = dataPartition;
+    }
+
+    public static Collection<Student> getData_partition() {
+        return data_partition;
     }
 
     /**
-     * Entropy of D
+     * General formula for Entropy of D for one case
      *
      * @param caseOccurrence frequency of a case
      * @param allOccurrences all occurrences
      * @return entropy
      */
-    public double infoD(double caseOccurrence, double allOccurrences) {
+    private static double info(double caseOccurrence, double allOccurrences) {
         if (caseOccurrence == 0) return 0;
         double div = caseOccurrence / allOccurrences;
         return -(div) * (Math.log(div) / Math.log(2));
     }
 
-    public int occurrence(Enum attributeName) {
-        int count = 0;
-        for (Student m : dataPartition)
-            if (m.getAttributeValue(Degree.class).equals(attributeName)) count++;
-        return count;
+    /**
+     * Expected information needed to classify a tuple in D
+     *
+     * @param clazz
+     * @return
+     */
+    private static double InfoD(Object clazz) {
+        Object[] subclasses = ((Class) clazz).getEnumConstants();
+        double InfoD = 0;
+        for (Object subclass : subclasses) {
+            int size = listAttributeCategories(data_partition, clazz, subclass).size();
+            InfoD += info(size, data_partition.size());
+        }
+        return InfoD;
+    }
+
+    private static double calculateInfoCurrentAttribute(Object category, Class currentEnumClass, Object clazz) {
+        double infoCurrAttribute;
+        double sumInfoD = 0;
+        long catCountTotal = 0;
+        Object[] subclasses = ((Class) clazz).getEnumConstants();
+        long[] catNumbers = new long[subclasses.length];
+
+        for (int i = 0; i < subclasses.length; i++) {
+            Object ad = subclasses[i];
+            long categoriesNumber = countAttributeCategories(data_partition, currentEnumClass, category, clazz, subclasses[i]);
+            catCountTotal += categoriesNumber;
+            catNumbers[i] = categoriesNumber;
+        }
+        for (long catNumber : catNumbers) {
+            sumInfoD += info(catNumber, catCountTotal);
+        }
+        infoCurrAttribute = ((double) catCountTotal / data_partition.size()) * sumInfoD;
+        return infoCurrAttribute;
+    }
+
+    /**
+     * Print result of attributeSelection() method
+     *
+     * @param result
+     */
+    public static void printSelectedAttributes(Map<Double, Class> result) {
+        for (Map.Entry entry : result.entrySet()) {
+            System.out.printf("Class: %-20s Info %-20s %.2f\n",
+                    ((Class) entry.getValue()).getSimpleName(), ((Class) entry.getValue()).getSimpleName(), (double) entry.getKey());
+        }
     }
 
     /**
@@ -51,80 +88,32 @@ public class Algorithm {
      * and for each category calculates info(D) and them sum them together
      * within each attribute.
      *
-     * @param data_partition data partition D
-     * @param attributeList  list of attributes for object
+     * @param attributeList list of attributes for object
      * @return a map with class name and value of info(D)
      */
-    public Map<Double, Class> attributeSelection(Collection<Student> data_partition, Collection<Object> attributeList) {
-        Map<Double, Class> result = new TreeMap<>();
-        for (Object attribute : attributeList) {
-            Class currentEnumClass = (Class) attribute;                                // getting ENUM Class
-            Object[] categories = currentEnumClass.getEnumConstants();          // getting enumValues from ENUM Class
-            double infoCurrAttribute = 0;                                       // main formula to be calculated
+    public static Map<Double, Class> attributeSelection(Collection<Object> attributeList, Object clazz, boolean print) {
 
-            for (Object category : categories) {
-                long catEdible = countAttributeCategories(data_partition, currentEnumClass, category, Degree.class, edible);
-                long catPoisonous = countAttributeCategories(data_partition, currentEnumClass, category, Degree.class, poisonous);
-                long catCountTotal = catEdible + catPoisonous;
-                infoCurrAttribute = infoCurrAttribute + ((double) catCountTotal / data_partition.size()) *
-                        (infoD(catEdible, catCountTotal) + infoD(catPoisonous, catCountTotal));
-            }
+        Map<Double, Class> result = new TreeMap<>();
+        double InfoD = InfoD(clazz);
+
+        if (attributeList.contains(clazz))
+            attributeList.remove(clazz);
+
+        for (Object attribute : attributeList) {
+            double infoCurrAttribute = 0;
+            Class currentEnumClass = (Class) attribute;                         // getting ENUM Class
+            Object[] categories = currentEnumClass.getEnumConstants();          // getting enumValues from ENUM Class
+
+            for (Object category : categories)
+                infoCurrAttribute += calculateInfoCurrentAttribute(category, currentEnumClass, clazz);
             result.put(infoCurrAttribute, currentEnumClass);
         }
+
+        if (print) {
+            System.out.printf("InfoD: %-20.2f\n", InfoD);
+            printSelectedAttributes(result);
+        }
         return result;
-    }
-
-    public Class selectBestAttribute(Map<Double, Class> attributes) {
-        double minInfoD = Collections.min(attributes.keySet());
-        return attributes.get(minInfoD);
-    }
-
-    public Enum majority(int edibleCount, int poisonousCount) {
-        if (edibleCount > poisonousCount)
-            return edible;
-        return poisonous;
-    }
-
-    public Node<Object> generateDecisionTree(Collection<Student> data_partitionD, Collection<Object> attributeList) {
-        Node<Object> node = new Node(null, null, null);
-        int edibleCount = countAttributeCategories(data_partitionD, Degree.class, edible, Degree.class, edible);
-        int poisonousCount = countAttributeCategories(data_partitionD, Degree.class, poisonous, Degree.class, poisonous);
-
-        if (attributeList.isEmpty() && poisonousCount > edibleCount || edibleCount == 0) {
-            node.addLeaf(new Node<>(poisonous, node, null));
-            //node = new Node(poisonous, null, null);
-            return node;
-        }
-        if (attributeList.isEmpty() && edibleCount > poisonousCount || poisonousCount == 0) {
-            node.addLeaf(new Node<>(edible, node, null));
-            //node = new Node(edible, null, null);
-            return node;
-        }
-
-        Object bestSplittingCriterion = selectBestAttribute(attributeSelection(data_partitionD, attributeList));  // class of ENUM
-        Object[] splittCritOutcomes = ((Class) bestSplittingCriterion).getEnumConstants();                   // ENUM attributes of best splitting criterion
-        node.setLabel(bestSplittingCriterion);
-
-        editedAttributeList.remove(bestSplittingCriterion);
-
-        for (Object outcome_j : splittCritOutcomes) {     // for each outcome j of splittingCriterion   .. almond, anise, creosote...
-            Collection<Student> Dj = new ArrayList<>(listAttributeCategories(data_partitionD, bestSplittingCriterion, outcome_j));  // for almond 211
-            // System.out.println(Dj.size() + " " + outcome_j);
-            if (Dj.size() <= 0) {            //let Dj be the set of data tuples in D satisfying outcome j;   // a partition
-                /*Node outcome = new Node(outcome_j, node);
-                outcome.addLeaf(new Node(null, outcome));*/
-                Node endNode = new Node(node + ":" + outcome_j, outcome_j, node);
-                endNode.addLeaf(new Node("no info", null, null));
-                node.addLeaf(endNode);                                                              // if Dj is empty then
-            } else {
-                Node leaf = generateDecisionTree(Dj, editedAttributeList);
-                leaf.addParent(node);
-                leaf.setLabel(node + ":" + outcome_j);
-                //leaf.setBranch(outcome_j);
-                node.addLeaf(leaf);   // else parent.addLeaf(generateDecisionTree(Dj, editedAttributeList));
-            }
-        }
-        return node;
     }
 }
 

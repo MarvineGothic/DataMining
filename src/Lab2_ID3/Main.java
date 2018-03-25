@@ -1,10 +1,11 @@
 package Lab2_ID3;
 
 import Lab2_ID3.enums.Class_Label;
-import Assignment_Questionnaire.Library.DecisionTree.DecisionTree;
+import Assignment_Questionnaire.DecisionTree.DecisionTree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import static Lab2_ID3.enums.Class_Label.edible;
@@ -31,6 +32,7 @@ public class Main {
 
         System.out.println("Lab2_ID3.DataManager loaded " + mushrooms.size() + " mushrooms");
 
+        Map<Double, Class> attr = id3.attributeSelection(mushrooms,attributeList);
         double infoD = id3.infoD(edibleOccurrence, allOccurrences) + id3.infoD(poisonousOccurrence, allOccurrences);
         System.out.println(infoD);
         DecisionTree mushroomTree = new DecisionTree(id3.generateDecisionTree(mushrooms, attributeList), "Mushrooms");

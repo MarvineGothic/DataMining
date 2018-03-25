@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * The Lab2_ID3.Mushroom class is used to contain the data for each mushroom found in the datafile.
  * More info on each attribute in agaricus-lepiotaexplanation.txt.
  */
-public class Mushroom {
+public class Mushroom{
 
     /**
      * The attribute to built a classifier for.

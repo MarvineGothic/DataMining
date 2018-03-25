@@ -4,8 +4,6 @@ import Assignment_Questionnaire.enums.*;
 import Assignment_Questionnaire.enums.Number;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -51,14 +49,13 @@ public class Student {
 
     public static ArrayList<Object> getAttributeList() {
         ArrayList<Object> attributeList = new ArrayList<>();
-        attributeList.add(TimeStamp.class);
         attributeList.add(Age.class);
         attributeList.add(Gender.class);
         attributeList.add(ShoeSize.class);
         attributeList.add(Height.class);
         attributeList.add(Degree.class);
         attributeList.add(ReasonTakeCourse.class);
-        attributeList.add(ProgrammingLanguage.class);
+        /*attributeList.add(ProgrammingLanguage.class);*/
         attributeList.add(PhoneOS.class);
 
         attributeList.add(Topic_DED.class);
@@ -73,10 +70,10 @@ public class Student {
         attributeList.add(Topic_CDMA.class);
         attributeList.add(Topic_UDMT.class);
 
-        attributeList.add(GamesPlayed.class);
-        attributeList.add(CommuteToITU.class);
-        attributeList.add(TraverseITU.class);
-        attributeList.add(FourNumbers.class);
+        /*attributeList.add(GamesPlayed.class);*/
+        /*attributeList.add(CommuteToITU.class);*/
+        /*attributeList.add(TraverseITU.class);*/
+        /*attributeList.add(FourNumbers.class);*/
         attributeList.add(Therb.class);
         attributeList.add(Number.class);
         attributeList.add(Film.class);
@@ -92,6 +89,8 @@ public class Student {
         String field = "";
         Field[] fields = this.getClass().getFields();
         for (Field f : fields) {
+            if (f.getType().isArray() && !(attribute instanceof String))
+                attribute = ((Class) attribute).getSimpleName();
             if (attribute instanceof String) {
                 String s = f.getType().getSimpleName().replaceAll("]|\\[", "");
                 if (s.equals(attribute)) {
@@ -105,6 +104,7 @@ public class Student {
         }
         return getValueByName(field, this);
     }
+
     /**
      * Method to get double value from Student class attributes
      * to normalize it afterwards and use in clustering

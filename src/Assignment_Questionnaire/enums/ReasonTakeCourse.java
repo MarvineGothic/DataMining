@@ -23,7 +23,12 @@ public enum ReasonTakeCourse {
         return reason.equals(other);
     }
 
+    public String getName() {
+        return this.reason;
+    }
+
     public String toString() {
         return String.format("Why did you take this course - %s", this.reason);
+        //return this.reason;
     }
 }
