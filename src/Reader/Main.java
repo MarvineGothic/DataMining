@@ -1,4 +1,4 @@
-package ExamProject;
+package Reader;
 
 import java.io.IOException;
 import java.util.Arrays;
