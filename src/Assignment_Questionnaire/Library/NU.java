@@ -4,11 +4,14 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 /**
+ * @author Sergiy Isakov
+ * <p>
  * Normalization Utility Class
  */
 public class NU {
     /**
      * MinMax normalization method
+     *
      * @param vi
      * @param mina
      * @param maxa

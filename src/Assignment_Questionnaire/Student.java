@@ -10,6 +10,9 @@ import java.util.Arrays;
 import static Assignment_Questionnaire.Library.RU.getMethod;
 import static Assignment_Questionnaire.Library.RU.getValueByName;
 
+/**
+ * @author Sergiy Isakov
+ */
 @SuppressWarnings("all")
 public class Student {
     public TimeStamp s_timeStamp;                                                        //n
@@ -41,9 +44,9 @@ public class Student {
     public FourNumbers[] s_fourNumbers;                                                   //n
     public Therb s_therb;                                                                 //n
     public Number s_number;                                                                //n
-    public Film[] s_favFilm;                                                                 //n
+    public FavoriteFilm[] s_favFilm;                                                                 //n
     public TVShow[] s_favTVshow;                                                            //n
-    public Game[] s_favGame;                                                                 //n
+    public FavoriteGame[] s_favGame;                                                                 //n
     public Row s_row;                                                                      //y
     public Seat s_seat;                                                                     //y
 
@@ -55,7 +58,6 @@ public class Student {
         attributeList.add(Height.class);
         attributeList.add(Degree.class);
         attributeList.add(ReasonTakeCourse.class);
-        /*attributeList.add(ProgrammingLanguage.class);*/
         attributeList.add(PhoneOS.class);
 
         attributeList.add(Topic_DED.class);
@@ -70,15 +72,11 @@ public class Student {
         attributeList.add(Topic_CDMA.class);
         attributeList.add(Topic_UDMT.class);
 
-        /*attributeList.add(GamesPlayed.class);*/
-        /*attributeList.add(CommuteToITU.class);*/
-        /*attributeList.add(TraverseITU.class);*/
-        /*attributeList.add(FourNumbers.class);*/
         attributeList.add(Therb.class);
         attributeList.add(Number.class);
-        attributeList.add(Film.class);
+        attributeList.add(FavoriteFilm.class);
         attributeList.add(TVShow.class);
-        attributeList.add(Game.class);
+        attributeList.add(FavoriteGame.class);
         attributeList.add(Row.class);
         attributeList.add(Seat.class);
         return attributeList;

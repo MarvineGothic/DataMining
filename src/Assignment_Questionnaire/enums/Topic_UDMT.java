@@ -23,12 +23,16 @@ public enum Topic_UDMT {
         return rate;
     }
 
+    public String getTopicName() {
+        return "Use off-the-shelf data mining tools";
+    }
+
     public String getName() {
         return name;
     }
 
     @Override
     public String toString() {
-        return "Use off-the-shelf data mining tools - " + name;
+        return getTopicName() + " - " + name;
     }
 }

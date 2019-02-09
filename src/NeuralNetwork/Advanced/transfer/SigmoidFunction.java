@@ -6,6 +6,10 @@ package NeuralNetwork.Advanced.transfer;
  * @author jlmd
  */
 public class SigmoidFunction implements ITransferFunction {
+    public static double sigmoid(double x) {
+        return 1 / (1 + Math.pow(Math.E, (-x)));
+    }
+
     @Override
     public float transfer(float value) {
         return (float) (1 / (1 + Math.exp(-value)));

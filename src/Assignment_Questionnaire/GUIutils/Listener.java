@@ -1,4 +1,4 @@
-package Assignment_Questionnaire.utils;
+package Assignment_Questionnaire.GUIutils;
 
 import Assignment_Questionnaire.interfaces.View;
 
@@ -8,16 +8,23 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import static Assignment_Questionnaire.GUIutils.MenuController.openFile;
+import static Assignment_Questionnaire.GUIutils.PopUp.*;
 import static Assignment_Questionnaire.StudentManager.printStudentData;
-import static Assignment_Questionnaire.utils.MenuController.openFile;
-import static Assignment_Questionnaire.utils.PopUp.*;
 
+/**
+ * @author Sergiy Isakov
+ */
 public class Listener implements ActionListener, MouseListener {
     private static View view;
     private String buttonName = "";
 
     public Listener(View view) {
         Listener.view = view;
+    }
+
+    public static View getView() {
+        return view;
     }
 
     // ActionListener
@@ -30,13 +37,13 @@ public class Listener implements ActionListener, MouseListener {
                 openFile(view);
                 break;
             case "Apriori":
-                System.out.println("Apriori");
+                aprioriPOP();
                 break;
             case "KMean":
-                clustering();
+                clusteringPOP();
                 break;
             case "ID3":
-                id3algorithm();
+                id3algorithmPOP();
                 break;
             case "Decision Tree":
                 System.out.println("Decision Tree");
@@ -56,21 +63,7 @@ public class Listener implements ActionListener, MouseListener {
                     printStudentData();
                 }
                 break;
-            case "Clear List":
-                // GuiItems.clearAllWindows(view);
-                // GuiItems.clearAllRecipes();
-                break;
-            // recipe context menu
-            /*case "Options":
-                id3algorithm();
-                break;*/
-            case "Add new recipe":
-                PopUp.createRecipe(this, view);
-                break;
-            case "Remove recipe from list":
-                if (!buttonName.isEmpty())
-                    PopUp.deleteRecipe(buttonName, view);
-                break;
+
         }
 
     }
@@ -87,10 +80,10 @@ public class Listener implements ActionListener, MouseListener {
             case 4:
                 switch (eName) {
                     case "JPanel":
-                        view.getPanelPopUp().show(e.getComponent(), e.getX(), e.getY());
+                        //view.getPanelPopUp().show(e.getComponent(), e.getX(), e.getY());
                         break;
                     case "JButton":
-                        view.getRecipePopUp().show(e.getComponent(), e.getX(), e.getY());
+                        //view.getRecipePopUp().show(e.getComponent(), e.getX(), e.getY());
                         buttonName = ((JButton) e.getSource()).getText();
                         break;
                 }
@@ -116,9 +109,5 @@ public class Listener implements ActionListener, MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
-    }
-
-    public static View getView() {
-        return view;
     }
 }

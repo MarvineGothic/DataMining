@@ -1,41 +1,77 @@
 package Assignment_Questionnaire.Library;
 
-import jdk.nashorn.internal.runtime.regexp.joni.Regex;
-
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
+ * @author Sergiy Isakov
+ * <p>
  * Cleaning Utility Class
  */
 public class CU {
-    public static void main(String[] args) {
-        int[] list = {1, -2, 4, -4, 9, -6, 16, -8, 25, -10};
-        System.out.println(stdev(list));
-        List<Double> list2 = new ArrayList<>();
-        for (int i = 0; i < list.length; i++) list2.add((double) list[i]);
-        System.out.println(stdevList(list2));
 
-        /*System.out.println(minMax(73.6, 12, 98, 0.0, 1.0));
-            System.out.println(zScoreD(73.6, 54, 16));
-            System.out.println(decimalScaling(-986, -986, 917));*/
+    /**
+     * Using a regex expression this method processes attribute double values
+     * from uncleaned raw data set to find a mean value for missing values.
+     * Sorts out only values that fits in given pattern using method sortDigitsOut()
+     * removes possible outliers by method removeTwoPercent()
+     * and returns a mean value
+     *
+     * @param data
+     * @param regex
+     * @param column
+     * @return
+     */
+    public static double meanOfAttribute(String[][] data, String regex, int column) {
+        HashMap<String, List<String>> attribute = new HashMap<>();
+        List<Double> attributeProcessed = new ArrayList<>();
+        String attributeTitle = data[0][column];
+        attribute.put(attributeTitle, new ArrayList<>());
+        for (int i = 1; i < data.length; i++)
+            attribute.get(attributeTitle).add(data[i][1]);
+        attributeProcessed.addAll(sortDigitsOut(data, column, regex));
+        removeTwoPercent(attributeProcessed);
+        return meanD(attributeProcessed);
     }
 
-
+    /**
+     * Mean value for integers
+     *
+     * @param data
+     * @return
+     */
     public static int meanI(Collection<Integer> data) {
         return (data.stream().mapToInt(Integer::intValue).sum()) / data.size();
     }
 
+    /**
+     * Mean value for doubles
+     *
+     * @param data
+     * @return
+     */
     public static double meanD(Collection<Double> data) {
         return (data.stream().mapToDouble(Double::doubleValue).sum()) / data.size();
     }
 
+    /**
+     * Median value for doubles
+     *
+     * @param data
+     * @return
+     */
     public static double median(List<Double> data) {
         Collections.sort(data);
         return (data.size() % 2 == 1) ? data.get(data.size() / 2) : (data.get(data.size() / 2) + data.get(data.size() / 2 - 1)) / 2;
     }
 
+    /**
+     * Modes values for doubles
+     *
+     * @param numbers
+     * @return
+     */
     public static List<Double> modes(final List<Double> numbers) {
         final Map<Double, Long> countFrequencies = numbers.stream()
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
@@ -50,6 +86,12 @@ public class CU {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Mean absolute deviation for doubles
+     *
+     * @param data
+     * @return
+     */
     public static double meanAbsDevD(Collection<Double> data) {
         final double[] absSum = {0.0};
         data.forEach(v -> absSum[0] += Math.abs(v - meanD(data)));
@@ -90,6 +132,12 @@ public class CU {
         return Math.sqrt(num[0] / list.size());
     }
 
+    /**
+     * Removes two percent of minimum and maximum values from a data set
+     * (Escape possible outliers)
+     *
+     * @param doubles
+     */
     public static void removeTwoPercent(Collection<Double> doubles) {
         int twoProcent = doubles.size() * 2 / 100;
         for (int i = 0; i < twoProcent; i++) {
@@ -100,15 +148,18 @@ public class CU {
 
     /**
      * Can sort out digits from two dimension array
+     * using a regex expression as a pattern to find
+     * useful values
+     *
      * @param data
      * @param regex
      * @return
      */
-    public static List<Double> sortDigitsOut(Object[][] data,int column, String regex) {
+    public static List<Double> sortDigitsOut(Object[][] data, int column, String regex) {
         List<Double> listProcessed = new ArrayList<>();
         for (int i = 1; i < data.length; i++) {
             String line = ((String) data[i][column]).replaceAll("\\s+\\D+", "")
-                    .replaceAll(",",".");
+                    .replaceAll(",", ".");
             if (line.matches(regex))
                 listProcessed.add(Double.valueOf(line));
         }

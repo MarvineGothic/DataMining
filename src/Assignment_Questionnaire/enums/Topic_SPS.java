@@ -23,12 +23,16 @@ public enum Topic_SPS {
         return rate;
     }
 
+    public String getTopicName() {
+        return "Study patterns on sets";
+    }
+
     public String getName() {
         return name;
     }
 
     @Override
     public String toString() {
-        return "Study patterns on sets - " + name;
+        return getTopicName() + " - " + name;
     }
 }

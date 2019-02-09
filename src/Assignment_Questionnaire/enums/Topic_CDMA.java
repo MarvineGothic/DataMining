@@ -23,12 +23,16 @@ public enum Topic_CDMA {
         return rate;
     }
 
+    public String getTopicName() {
+        return "Code data mining algorithms";
+    }
+
     public String getName() {
         return name;
     }
 
     @Override
     public String toString() {
-        return "Code data mining algorithms - " + name;
+        return getTopicName() + " - " + name;
     }
 }

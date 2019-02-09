@@ -10,7 +10,7 @@ import NeuralNetwork.Advanced.callback.INeuralNetworkCallback;
  */
 public class Main {
     public static void main(String [] args){
-        System.out.println("Starting neural network sample... ");
+        System.out.println("Starting NN network sample... ");
 
         float[][] x = DataUtils.readInputsFromFile(System.getProperty("user.dir") + "/src/NeuralNetwork/Advanced/data/x.txt");
         int[] t = DataUtils.readOutputsFromFile(System.getProperty("user.dir") + "/src/NeuralNetwork/Advanced/data/t.txt");

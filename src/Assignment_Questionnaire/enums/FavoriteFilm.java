@@ -1,4 +1,4 @@
 package Assignment_Questionnaire.enums;
 
-public enum Film {
+public enum FavoriteFilm {
 }

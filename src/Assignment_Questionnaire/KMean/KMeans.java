@@ -1,10 +1,12 @@
 package Assignment_Questionnaire.KMean;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import static Assignment_Questionnaire.KMean.KMU.*;
 
+/**
+ * @author Sergiy Isakov
+ */
 public class KMeans {
     private static ArrayList<Cluster> clusters;
 
@@ -27,6 +29,12 @@ public class KMeans {
      */
     public static ArrayList<Cluster> KMeansPartition(int k, ArrayList<ClusterObject> data, boolean print) {
         System.out.println("\n\n\nClustering KMeans:\n");
+        System.out.println("Topic_CDMA - Code data mining algorithms");
+        System.out.println("Topic_CPM - Create predictive models");
+        System.out.println("Topic_DED - Design efficient databases for large amounts of data");
+        System.out.println("Topic_DGS - Define groups of similar objects");
+        System.out.println("Topic_SPG - Study patterns on graphs");
+        System.out.println("Topic_SPI - Study patterns on images");
         clusters = randomCenter(k, data, new KMeanCluster());
 
         while (true) {
@@ -47,7 +55,6 @@ public class KMeans {
             else
                 break;
         }
-        Collections.sort(clusters);
         if (print) printClusters();
         return clusters;
     }

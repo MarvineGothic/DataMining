@@ -4,7 +4,7 @@ package NeuralNetwork.Advanced.Entity;
  * @author jlmd
  */
 public enum Error {
-    NOT_SAME_INPUT_OUTPUT(0, "Not same input and output size"),
+    NOT_SAME_INPUT_OUTPUT(0, "Not same input and output weightsSize"),
     ZERO_INPUT_DIMENSION(1, "Input dimension is zero"),
     ZERO_INPUT_ELEMENTS(2, "Number of input elements is zero"),
     ZERO_NEURONS(3, "Number of neurons is zero");

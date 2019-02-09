@@ -2,34 +2,48 @@ package Assignment_Questionnaire.Apriori;
 
 import Assignment_Questionnaire.Library.ASU;
 import Assignment_Questionnaire.Student;
-import Assignment_Questionnaire.enums.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static Assignment_Questionnaire.StudentManager.loadStudents;
-
-@SuppressWarnings("unchecked")
+/**
+ * @author Sergiy Isakov
+ */
+@SuppressWarnings("all")
 public class Apriori {
     private static Hashtable<ItemSet, Integer> allFrequentItemSets;
     private static List<ItemSet> aprioriResult;
     private static Object[][] dataSet;
+    private static boolean empty;
 
     static {
-        allFrequentItemSets = new Hashtable<>();
-        aprioriResult = new ArrayList<>();
+        initApriori();
     }
 
-    public static void main(String[] args) {
-        final int supportThreshold = 5;
-        final double confidenceLimit = 90;
-        String path = "/data/Data Mining - Spring 2018.csv";
-        ArrayList<Student> students = loadStudents();
-        createTransactions(students, Degree.class, ReasonTakeCourse.class,
-                Topic_DED.class, Topic_SPS.class, Topic_UDMT.class, Topic_CDMA.class, Topic_CPM.class);
-        apriori(supportThreshold, false);
-        associationRules(confidenceLimit, null, Degree.class);
+    /**
+     * Apriori algorithm
+     *
+     * @param supportThreshold
+     * @return
+     */
+    public static List<ItemSet> apriori(int supportThreshold, boolean printAll) {
+        int k;
+        Hashtable<ItemSet, Integer> frequentItemSets = generateFrequentItemSetsLevel1(dataSet, supportThreshold);
+        for (k = 1; frequentItemSets.size() > 0; k++) {
+            if (printAll)
+                System.out.print("\n\nFinding frequent itemsets of length " + (k + 1) + "…");
+            frequentItemSets = generateFrequentItemSets(supportThreshold, dataSet, frequentItemSets);
+            allFrequentItemSets.putAll(frequentItemSets);
+            aprioriResult.addAll(frequentItemSets.entrySet().stream().filter(itemSetIntegerEntry -> itemSetIntegerEntry.getValue() >= supportThreshold)
+                    .map(Map.Entry::getKey).collect(Collectors.toList()));
+            if (printAll) {
+                System.out.println(" found " + frequentItemSets.size());
+                frequentItemSets.forEach((key, value) -> System.out.println(Arrays.toString(key.set) + " " + value));
+            }
+        }
+        return aprioriResult;
     }
+
 
     /**
      * Creating a transactions array to use in apriori algorithm
@@ -53,30 +67,14 @@ public class Apriori {
         return dataSet;
     }
 
-
     /**
-     * @param supportThreshold
-     * @return
+     * Prints out result for given ItemSet, confidenceLimit and Class
+     *
+     * @param resultItemSet
+     * @param confidenceLimit
+     * @param definingClass
+     * @param definedClass
      */
-    public static List<ItemSet> apriori(int supportThreshold, boolean printAll) {
-        int k;
-        Hashtable<ItemSet, Integer> frequentItemSets = generateFrequentItemSetsLevel1(dataSet, supportThreshold);
-        for (k = 1; frequentItemSets.size() > 0; k++) {
-            if (printAll)
-                System.out.print("\n\nFinding frequent itemsets of length " + (k + 1) + "…");
-            frequentItemSets = generateFrequentItemSets(supportThreshold, dataSet, frequentItemSets);
-            allFrequentItemSets.putAll(frequentItemSets);
-            aprioriResult.addAll(frequentItemSets.entrySet().stream().filter(itemSetIntegerEntry -> itemSetIntegerEntry.getValue() >= supportThreshold)
-                    .map(Map.Entry::getKey).collect(Collectors.toList()));
-            if (printAll) {
-                System.out.println(" found " + frequentItemSets.size());
-                frequentItemSets.forEach((key, value) -> System.out.println(Arrays.toString(key.set) + " " + value));
-            }
-        }
-        return aprioriResult;
-    }
-
-
     public static void confidence(ItemSet resultItemSet, double confidenceLimit, Class definingClass, Class definedClass) {
         double supportA;
         double supportAB;
@@ -99,11 +97,13 @@ public class Apriori {
 
             if (confidence >= confidenceLimit) {
                 if (definingClass != null && itemSet.set.length == 1 && itemSet.set[0].getClass().isAssignableFrom(definingClass)) {
+                    empty = false;
                     System.out.printf("%s %-20s [support = %.0f%% confidence = %.0f%%]\n %s \n\n",
                             itemSet, "=>", supportAB * 100 / dataSet.length, confidence,
                             Arrays.toString(difference).replaceAll("]|\\[", "").replaceAll(",", "\n"));
                 }
                 if (definedClass != null && difference.length == 1 && difference[0].getClass().isAssignableFrom(definedClass)) {
+                    empty = false;
                     System.out.printf("%s \n%-80s=> %s [support = %.0f%% confidence = %.0f%%]\n\n",
                             itemSet, "-------------------------------------------------------------------------------",
                             Arrays.toString(difference),
@@ -113,10 +113,24 @@ public class Apriori {
         }
     }
 
+    /**
+     * Prints out all association Rules from apriori result using method confidence()
+     *
+     * @param confidenceLimit
+     * @param definingClass
+     * @param definedClass
+     */
     public static void associationRules(double confidenceLimit, Class definingClass, Class definedClass) {
+        empty = true;
         System.out.println("\n\nApriori. Association rules:\n================================\n");
+
         for (ItemSet itemSet : aprioriResult)
             confidence(itemSet, confidenceLimit, definingClass, definedClass);
+
+        if (empty)
+            System.out.println("No results.\nProbably you've chose too high values for support threshold or confidence.\n" +
+                    "Try again with lower threshold or confidence\n" +
+                    "============================================================================");
     }
 
     /**
@@ -192,5 +206,10 @@ public class Apriori {
             if (ASU.isSubset(sets, itemSet))
                 count++;
         return count;
+    }
+
+    public static void initApriori() {
+        allFrequentItemSets = new Hashtable<>();
+        aprioriResult = new ArrayList<>();
     }
 }

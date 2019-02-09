@@ -1,14 +1,11 @@
-package Assignment_Questionnaire.utils;
+package Assignment_Questionnaire.GUIutils;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 
 /**
- * Utility class(static) for making menu and context menu items
- * Created by Sergiy on 11.12.2017.
+ * @author Sergiy Isakov
  */
 public class MenuHelper {
 
@@ -16,13 +13,6 @@ public class MenuHelper {
         JMenuItem menuItem = new JMenuItem(text);
         menuItem.addActionListener(actionListener);
         parent.add(menuItem);
-        return menuItem;
-    }
-
-    public static JMenuItem addMenu(JPopupMenu jPopupMenu, String title, ActionListener actionListener) {
-        JMenuItem menuItem = new JMenuItem(title);
-        menuItem.addActionListener(actionListener);
-        jPopupMenu.add(menuItem);
         return menuItem;
     }
 
@@ -47,23 +37,6 @@ public class MenuHelper {
         addMenuItem(helpMenu, "About", listener);
     }
 
-    public static void initPopUpPanel(ActionListener listener, JPopupMenu popupMenu) {
-        addMenu(popupMenu, "Add Recipes", listener);
-        addMenu(popupMenu, "Add new recipe", listener);
-        addMenu(popupMenu, "Clear List", listener);
-    }
-    public static void initPopUpButton(ActionListener listener, JPopupMenu popupMenu){
-        addMenu(popupMenu, "Options", listener);
-        addMenu(popupMenu, "Remove recipe from list", listener);
-    }
-
-    public static JMenu initPopUpSubmenu(String title, int event, JPopupMenu popupMenu) {
-        JMenu submenu = new JMenu(title);
-        submenu.setMnemonic(event);
-        popupMenu.add(submenu);
-        return submenu;
-    }
-    // probably delete or use in popup
     public static void showDialog(Component view, String message, String title) {
         JOptionPane.showMessageDialog(view, message,
                 title, JOptionPane.INFORMATION_MESSAGE);

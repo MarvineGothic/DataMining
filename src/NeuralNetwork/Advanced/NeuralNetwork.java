@@ -15,7 +15,7 @@ import NeuralNetwork.Advanced.transfer.SigmoidFunction;
 
 /**
  * https://github.com/jlmd/SimpleNeuralNetwork
- * Engine of neural network. This class do all necessary work to learn from input and output data and generate a result
+ * Engine of NN network. This class do all necessary work to learn from input and output data and generate a result
  *
  * @author jlmd
  */
@@ -63,7 +63,7 @@ public class NeuralNetwork {
     }
 
     /**
-     * Starts a asynchronous thread for do all neural network work
+     * Starts a asynchronous thread for do all NN network work
      * Calls a callback on finished
      */
     public void startLearning() {
@@ -130,8 +130,8 @@ public class NeuralNetwork {
     }
 
     /**
-     * Kernel of neural network. This code run on a separate thread and do all necessary work to make
-     * the neural network learn.
+     * Kernel of NN network. This code run on a separate thread and do all necessary work to make
+     * the NN network learn.
      */
     public class NeuralNetworkThread implements Runnable {
         @Override

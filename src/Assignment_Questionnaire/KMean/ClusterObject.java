@@ -1,13 +1,15 @@
 package Assignment_Questionnaire.KMean;
 
-import Assignment_Questionnaire.enums.Degree;
-
 import java.util.Map;
 import java.util.TreeMap;
 
+/**
+ * @author Sergiy Isakov
+ */
+@SuppressWarnings("all")
 public class ClusterObject {
     private Map<String, Double> attributes;
-    private Degree degree;
+    private Object clazz;
 
     private ClusterObject() {
         attributes = new TreeMap<>();
@@ -19,15 +21,15 @@ public class ClusterObject {
 
     @Override
     public String toString() {
-        String result = String.format("Class: %-15s ", degree);
+        String result = String.format("Class: %-15s ", clazz);
         for (Map.Entry attr : attributes.entrySet()) {
-            result = result.concat(String.format("%s %.2f  ", attr.getKey(), (double) attr.getValue()));
+            result = result.concat(String.format("%s %.2f  ", attr.getKey(), attr.getValue()));
         }
         return result;
     }
 
-    public Degree getDegree() {
-        return degree;
+    public Object getClazz() {
+        return clazz;
     }
 
     public Map<String, Double> getAttributes() {
@@ -58,8 +60,8 @@ public class ClusterObject {
             return this;
         }
 
-        public Builder setDegree(Degree degree) {
-            ClusterObject.this.degree = degree;
+        public Builder setClazz(Object clazz) {
+            ClusterObject.this.clazz = clazz;
             return this;
         }
 

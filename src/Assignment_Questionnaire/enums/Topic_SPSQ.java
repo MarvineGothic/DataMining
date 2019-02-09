@@ -23,12 +23,16 @@ public enum Topic_SPSQ {
         return rate;
     }
 
+    public String getTopicName() {
+        return "Study patterns on sequences";
+    }
+
     public String getName() {
         return name;
     }
 
     @Override
     public String toString() {
-        return "Study patterns on sequences - " + name;
+        return getTopicName() + " - " + name;
     }
 }

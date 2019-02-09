@@ -1,8 +1,8 @@
-package Assignment_Questionnaire.Testing;
+package Testing;
 
 import Assignment_Questionnaire.Student;
 import Assignment_Questionnaire.enums.Degree;
-import Assignment_Questionnaire.enums.Game;
+import Assignment_Questionnaire.enums.FavoriteGame;
 import Assignment_Questionnaire.enums.ProgrammingLanguage;
 
 import java.util.ArrayList;
@@ -48,8 +48,8 @@ public class RegexTest {
         // id3
         String path = "/data/Data Mining - Spring 2018.csv";
         ArrayList<Student> students = getStudents();
-        Object classValue = students.get(0).getAttributeValue(Game.class);
-        Object[] values = Game.values();
+        Object classValue = students.get(0).getAttributeValue(FavoriteGame.class);
+        Object[] values = FavoriteGame.values();
         System.out.println(classValue.equals(values[0]));
         System.out.println(students.get(0).getAttributeValue(Degree.class));
 

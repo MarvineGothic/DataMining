@@ -6,8 +6,11 @@ import java.util.*;
 
 import static Assignment_Questionnaire.ID3.Algorithm.attributeSelection;
 import static Assignment_Questionnaire.ID3.Algorithm.getData_partition;
-import static Assignment_Questionnaire.StudentManager.listAttributeCategories;
+import static Assignment_Questionnaire.Library.RU.listAttributeCategories;
 
+/**
+ * @author Sergiy Isakov
+ */
 @SuppressWarnings("all")
 public class DecisionTreeGenerator {
     private static Collection<Student> data_partition;
@@ -15,7 +18,6 @@ public class DecisionTreeGenerator {
 
     static {
         data_partition = getData_partition();
-        editedAttributeList = Student.getAttributeList();
     }
 
     /**
@@ -40,12 +42,13 @@ public class DecisionTreeGenerator {
      * endfor
      * 15. return node
      *
-     * @param data_partitionD
-     * @param attributeList
+     * @param data_partitionD data set of student tuples
+     * @param attributeList   list of attributes for student items
      * @param clazz           a Class that decides attributes
-     * @return
+     * @return a node for a decision tree
      */
     public static Node<Object> generateDecisionTree(Collection<Student> data_partitionD, Collection<Object> attributeList, Object clazz) {
+        if (editedAttributeList == null) setEditedAttributeList(attributeList);
         Node<Object> node = new Node(null, null, null);
 
         if (identifyFinalNode(node, data_partitionD, attributeList, clazz)) return node;
@@ -119,5 +122,10 @@ public class DecisionTreeGenerator {
     private static Class selectBestAttribute(Map<Double, Class> attributes) {
         double minInfoD = Collections.min(attributes.keySet());
         return attributes.get(minInfoD);
+    }
+
+    public static void setEditedAttributeList(Collection<Object> editedAttributeList) {
+        DecisionTreeGenerator.editedAttributeList = new ArrayList<>();
+        DecisionTreeGenerator.editedAttributeList = editedAttributeList;
     }
 }

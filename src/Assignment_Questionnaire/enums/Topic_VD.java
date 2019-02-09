@@ -23,12 +23,16 @@ public enum Topic_VD {
         return rate;
     }
 
+    public String getTopicName() {
+        return "Visualise data";
+    }
+
     public String getName() {
         return name;
     }
 
     @Override
     public String toString() {
-        return "Visualise data - " + name;
+        return getTopicName() + " - " + name;
     }
 }

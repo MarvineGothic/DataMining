@@ -1,9 +1,10 @@
 package Assignment_Questionnaire.KMean;
 
-import Assignment_Questionnaire.Student;
-
 import java.util.ArrayList;
 
+/**
+ * @author Sergiy Isakov
+ */
 public abstract class Cluster implements Comparable<Cluster> {
     public ClusterObject mainCluster;
     public ArrayList<ClusterObject> ClusterMembers;

@@ -23,12 +23,16 @@ public enum Topic_SPG {
         return rate;
     }
 
+    public String getTopicName() {
+        return "Study patterns on graphs";
+    }
+
     public String getName() {
         return name;
     }
 
     @Override
     public String toString() {
-        return "Study patterns on graphs - " + name;
+        return getTopicName() + " - " + name;
     }
 }

@@ -4,6 +4,7 @@ import NeuralNetwork.Advanced.transfer.ITransferFunction;
 
 /**
  * Generate out function using weights and input values
+ *
  * @author jlmd
  */
 public class Analyzer {
@@ -17,7 +18,7 @@ public class Analyzer {
     private int neurons;
     private ITransferFunction transferFunction;
 
-    public Analyzer(float[] x, float[][] wWeights, float[] bias, float[] vWeights, float bOut, int neurons, ITransferFunction transferFunction, int dimension){
+    public Analyzer(float[] x, float[][] wWeights, float[] bias, float[] vWeights, float bOut, int neurons, ITransferFunction transferFunction, int dimension) {
         this.fOutArray = new float[neurons];
         this.wWeights = wWeights;
         this.bias = bias;
@@ -31,13 +32,14 @@ public class Analyzer {
 
     /**
      * Calculate out function
+     *
      * @param x Elements array
      * @return float out function
      */
-    private float calculateFOut(float[] x){
-        for (int i = 0;i<neurons;i++){
+    private float calculateFOut(float[] x) {
+        for (int i = 0; i < neurons; i++) {
             float sum = 0;
-            for (int j=0; j<dimension; j++){
+            for (int j = 0; j < dimension; j++) {
                 sum = sum + (x[j] * wWeights[j][i]);
             }
 
@@ -45,7 +47,7 @@ public class Analyzer {
         }
 
         this.fOut = 0;
-        for (int i = 0;i<neurons;i++){
+        for (int i = 0; i < neurons; i++) {
             this.fOut += fOutArray[i] * vWeights[i];
         }
 

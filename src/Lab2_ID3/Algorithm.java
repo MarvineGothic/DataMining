@@ -108,7 +108,7 @@ public class Algorithm {
 
         for (Object outcome_j : splittCritOutcomes) {     // for each outcome j of splittingCriterion   .. almond, anise, creosote...
             Collection<Mushroom> Dj = new ArrayList<>(DataManager.listAttributeCategories(data_partitionD, bestSplittingCriterion, outcome_j));  // for almond 211
-            // System.out.println(Dj.size() + " " + outcome_j);
+            // System.out.println(Dj.weightsSize() + " " + outcome_j);
             if (Dj.size() <= 0) {            //let Dj be the set of data tuples in D satisfying outcome j;   // a partition
                 /*Node outcome = new Node(outcome_j, node);
                 outcome.addLeaf(new Node(null, outcome));*/

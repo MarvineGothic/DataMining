@@ -49,7 +49,7 @@ public class Main {
 
         // check for solitary mushrooms
         /*List<Mushroom> solitaryList = DataManager.listAttributeCategories(mushrooms, Population.class, solitary);
-        System.out.println("Size of solitary: " + solitaryList.size());
+        System.out.println("Size of solitary: " + solitaryList.weightsSize());
         solitaryList.sort(Comparator.comparing(mushroom -> mushroom.m_Class));
         for (Mushroom m: solitaryList){
             System.out.printf("Odor: %-15sSpore color: %-15sClass: %s\n", m.m_odor, m.m_spore_color, m.m_Class);

@@ -8,7 +8,10 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeSelectionModel;
 import java.awt.*;
 
-
+/**
+ * From Java library
+ * modified by Sergiy Isakov
+ */
 public class DecisionTree extends JPanel implements TreeSelectionListener {
     private static boolean useSystemLookAndFeel = true;
     private static Node<Object> top;
@@ -69,14 +72,10 @@ public class DecisionTree extends JPanel implements TreeSelectionListener {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        //new DecisionTree().run();
-    }
-
     public void run() {
         //Schedule a job for the event dispatch thread:
         //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+        SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();
             }

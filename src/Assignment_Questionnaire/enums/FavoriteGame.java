@@ -1,5 +1,5 @@
 package Assignment_Questionnaire.enums;
 
-public enum Game {
+public enum FavoriteGame {
 
 }

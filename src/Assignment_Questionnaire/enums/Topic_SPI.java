@@ -23,12 +23,16 @@ public enum Topic_SPI {
         return rate;
     }
 
+    public String getTopicName() {
+        return "Study patterns on images";
+    }
+
     public String getName() {
         return name;
     }
 
     @Override
     public String toString() {
-        return "Study patterns on images - " + name;
+        return getTopicName() + " - " + name;
     }
 }

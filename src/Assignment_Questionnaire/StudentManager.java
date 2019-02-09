@@ -6,20 +6,22 @@ import Assignment_Questionnaire.enums.Number;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static Assignment_Questionnaire.Library.CSVFileReader.readDataFile;
-import static Assignment_Questionnaire.Library.CU.*;
+import static Assignment_Questionnaire.Library.CU.meanOfAttribute;
 import static Assignment_Questionnaire.Library.DynamicEnum.addEnum;
 
 /**
- * This class creates list of Students, based on data from questionaire.
+ * @author Sergiy Isakov
+ * <p>
+ * This class cleans data set and creates a list of Students, based on data from questionaire.
  * All data is loaded using method 'readDataFile' from CSVFileReader.
  * For numeric values Age, ShoeSize, Height is calculates mean to use in filling missing values in data.
  * For the sake of consistency, all attributes are Enum classes and values are Enum values. A lot of values are
  * created dynamically, using method 'addEnum' from class 'DynamicEnum'.
- * To avoid code duplication some methods using generic types, and method 'loadTopic' using reflection.
+ * To avoid code duplication some methods using generic types, and method 'loadTopic' is using Java reflection.
  */
 @SuppressWarnings("all")
 public class StudentManager {
@@ -29,74 +31,38 @@ public class StudentManager {
     private static int maxGamesNumber;
     private static int maxFavGames;
 
-    // test method
-    public static void main(String[] args) {
-        printStudentData();
+    /**
+     * Loads data set from a file in a given path
+     *
+     * @param path
+     * @throws IOException
+     */
+    public static void loadData(String path) throws IOException {
+        data = readDataFile(path, "\",\"", "-", false);
+        path = path;
     }
 
-    public static void printStudentData() {
-        System.out.printf("Student database:\n");
-        if (data == null) try {
-            loadData(path);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String format = "%-32s %-5s %-8s %-10s %-7s %-15s %-40.35s %-88s %-10s %-30s %-30s %-30s %-30s %-30s %-30s " +
-                "%-30s %-30s %-30s %-30s %-30s %-250s %-35s %-220s %-35s %-15s %-15s %-60s %-60s %-60s %-15s %-10s\n";
-        String header = String.format(format, "Timestamp", "Age", "Gender", "ShoeSize", "Height", "Degree", "Why are you taking this course?",
-                "Which programming languages do you know?", "PhoneOS", "Design efficient databases", "Create predictive models",
-                "Define groups of similar obj", "Visualise data", "Study patterns on sets", "Study patterns on sequences",
-                "Study patterns on graphs", "Study patterns on text", "Study patterns on images", "Code data mining algorithms",
-                "Use off-the-shelf DM tools", "Which of these games have you played?", "How do you commute to ITU?", "In which order do you normally traverse these ITU locations?",
-                "Four numbers", "therb", "a number", "Favorite Film", "Favorite TV-Show", "Favorite Game", "Row", "Seat");
-        System.out.printf("%s", header);
-        for (int i = 0; i < header.length(); i++) System.out.print("-");
-        System.out.println();
-        for (Student s : loadStudents()) {
-            System.out.printf(format,
-                    s.s_timeStamp, s.s_age, s.s_gender, s.s_shoeSize, s.s_height, s.s_degree, s.s_reasonTakingCourse.getName(),
-                    Arrays.toString(s.s_programmingLanguages), s.s_phoneOS,
-                    s.s_topicDED.getName(), s.s_topicCPM.getName(), s.s_topicDGS.getName(), s.s_topicVD.getName(), s.s_topicSPS.getName(),
-                    s.s_topicSPSQ.getName(), s.s_topicSPG.getName(), s.s_topicSPT.getName(), s.s_topicSPI.getName(), s.s_topicCDMA.getName(),
-                    s.s_topicUDMT.getName(), Arrays.toString(s.s_gamesPlayed), Arrays.toString(s.s_commuteToITU),
-                    Arrays.toString(s.s_traverseITU), Arrays.toString(s.s_fourNumbers), s.s_therb,
-                    s.s_number, Arrays.toString(s.s_favFilm), Arrays.toString(s.s_favTVshow), Arrays.toString(s.s_favGame), s.s_row, s.s_seat);
-        }
-        for (int i = 0; i < header.length(); i++) System.out.print("=");
-        System.out.println("\n\n\n");
-    }
-
-    public static void loadData (String path) throws IOException{
-        //try {
-            data = readDataFile(/*System.getProperty("user.dir") + */path, "\",\"", "-", false);
-            path = path;
-        //} catch (IOException e) {
-        //    e.printStackTrace();
-        //}
-    }
-
-    public static double processAttribute(String[][] data, String regex, int column) {
-        HashMap<String, List<String>> attribute = new HashMap<>();
-        List<Double> attributeProcessed = new ArrayList<>();
-        String attributeTitle = data[0][column];
-        attribute.put(attributeTitle, new ArrayList<>());
-        for (int i = 1; i < data.length; i++)
-            attribute.get(attributeTitle).add(data[i][1]);
-        attributeProcessed.addAll(sortDigitsOut(data, column, regex));
-        removeTwoPercent(attributeProcessed);
-        return meanD(attributeProcessed);
-    }
-
-    public static ArrayList<Student> loadStudents() /*throws ArrayIndexOutOfBoundsException*/{
+    /**
+     * Creates an ArrayList of student Items from raw data set of Strings.
+     * It uses a number of load methods to create each attribute as an Enum class and
+     * assign values for those attributes for each tuple(Student Item).
+     * Almost each separate attribute uses its own load method, apart from some exceptions.
+     * For example all 11 topics has very similar properties, so they all use the same generic method loadTopic().
+     * Also favorite film, TV show and game shares same generic method loadFavorite();
+     * Almost all load methods also clean data and make it more consistent.
+     *
+     * @return
+     */
+    public static ArrayList<Student> loadStudents() {
         if (data == null) try {
             loadData(path);
         } catch (IOException e) {
             System.out.println("Path is empty");
         }
         students = new ArrayList<>();
-        double meanAge = processAttribute(data, "\\d{2}", 1);
-        double meanShoeSize = processAttribute(data, "\\d{2}(?:\\.?\\d*)?", 3);
-        double meanHeight = processAttribute(data, "\\d{3}(?:\\.?\\d*)?", 4);
+        double meanAge = meanOfAttribute(data, "\\d{2}", 1);
+        double meanShoeSize = meanOfAttribute(data, "\\d{2}(?:\\.?\\d*)?", 3);
+        double meanHeight = meanOfAttribute(data, "\\d{3}(?:\\.?\\d*)?", 4);
         maxGamesNumber = 0;
         maxFavGames = 0;
 
@@ -135,19 +101,24 @@ public class StudentManager {
             student.s_fourNumbers = loadFourNumbers(data[i][37]);
             student.s_therb = loadTherb(data[i][38]);
             student.s_number = loadNumber(data[i][39]);
-            student.s_favFilm = loadFavorite(Film.class, data[i][40]);
+            student.s_favFilm = loadFavorite(FavoriteFilm.class, data[i][40]);
             student.s_favTVshow = loadFavorite(TVShow.class, data[i][41]);
-            student.s_favGame = loadFavorite(Game.class, data[i][42]);
+            student.s_favGame = loadFavorite(FavoriteGame.class, data[i][42]);
             maxFavGames = student.s_favGame.length > maxFavGames ? student.s_favGame.length : maxFavGames;
             student.s_row = loadRow(data[i][43]);
             student.s_seat = loadSeat(data[i][44]);
             students.add(student);
         }
-        //System.out.println(Arrays.toString(FourNumbers.class.getEnumConstants()));
 
 
         return students;
     }
+
+    /**
+     * All methods below starting with "load" have similar functionality.
+     * They load and clean values for each attribute.
+     */
+
 
     public static <T extends Enum<?>> T loadEnum(Class<T> tClass, String name) {
         addEnum(tClass, name);
@@ -327,9 +298,9 @@ public class StudentManager {
 
         String[] favArray = fav.replaceAll("\\(\\w*\\)", "").trim().split(",");
         T[] enums = null;
-        if (tClass == Game.class) enums = (T[]) new Game[favArray.length];
+        if (tClass == FavoriteGame.class) enums = (T[]) new FavoriteGame[favArray.length];
         else if (tClass == TVShow.class) enums = (T[]) new TVShow[favArray.length];
-        else if (tClass == Film.class) enums = (T[]) new Film[favArray.length];
+        else if (tClass == FavoriteFilm.class) enums = (T[]) new FavoriteFilm[favArray.length];
 
         for (int i = 0; i < favArray.length; i++) {
             String show = favArray[i].trim().toUpperCase();
@@ -385,6 +356,11 @@ public class StudentManager {
         return Seat.valueOf(s);
     }
 
+    /**
+     * Getter for raw data set of two dimensional array of Strings from .csv file
+     *
+     * @return
+     */
     public static String[][] getData() {
         if (data == null) try {
             loadData(path);
@@ -394,60 +370,67 @@ public class StudentManager {
         return data;
     }
 
+    /**
+     * Getter for data set of student Items
+     *
+     * @return
+     */
     public static ArrayList<Student> getStudents() {
         if (students == null) loadStudents();
         return students;
     }
 
+    /**
+     * Method maxGames() calculates the maximum number of games played by students out of all data tuples.
+     * Needed for normalization method minMax()
+     *
+     * @return
+     */
     public static double maxGames() {
         return maxGamesNumber;
     }
 
+    /**
+     * Method maxFavGames() calculates the maximum number of favorite games of students out of all data tuples.
+     * Needed for normalization method minMax()
+     *
+     * @return
+     */
     public static int maxFavGames() {
         return maxFavGames;
     }
 
-    /**
-     * Method which might be helpful for calculating information gain. Counts the number of
-     * a specific Class label (e.g. poison or edible) appears in given data, when a specific Attribute has a specific value.
-     * The method assumes that the attribute is nominal.
-     *
-     * @param Data
-     * @param Attribute      Attribute we are calculating information gain for
-     * @param AttributeValue What value of the attribute
-     * @param Classification
-     * @return
-     */
-    public static int countAttributeCategories(Collection<Student> Data, Object Attribute, Object AttributeValue, Object mainClass, Object Classification) {
-        return (int) Data.stream().filter(student -> {
-            if (student.getAttributeValue(mainClass).equals(Classification)) {
-                return innerFunction(student, Attribute, AttributeValue);
-            }
-            return false;
-        }).count();
+
+    public static void printStudentData() {
+        System.out.printf("Student database:\n");
+        if (data == null) try {
+            loadData(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String format = "%-32s %-5s %-8s %-10s %-7s %-15s %-40.35s %-88s %-10s %-30s %-30s %-30s %-30s %-30s %-30s " +
+                "%-30s %-30s %-30s %-30s %-30s %-250s %-35s %-220s %-35s %-15s %-15s %-60s %-60s %-60s %-15s %-10s\n";
+        String header = String.format(format, "Timestamp", "Age", "Gender", "ShoeSize", "Height", "Degree", "Why are you taking this course?",
+                "Which programming languages do you know?", "PhoneOS", "Design efficient databases", "Create predictive models",
+                "Define groups of similar obj", "Visualise data", "Study patterns on sets", "Study patterns on sequences",
+                "Study patterns on graphs", "Study patterns on text", "Study patterns on images", "Code data mining algorithms",
+                "Use off-the-shelf DM tools", "Which of these games have you played?", "How do you commute to ITU?", "In which order do you normally traverse these ITU locations?",
+                "Four numbers", "therb", "a number", "Favorite Film", "Favorite TV-Show", "Favorite Game", "Row", "Seat");
+        System.out.printf("%s", header);
+        for (int i = 0; i < header.length(); i++) System.out.print("-");
+        System.out.println();
+        for (Student s : loadStudents()) {
+            System.out.printf(format,
+                    s.s_timeStamp, s.s_age, s.s_gender, s.s_shoeSize, s.s_height, s.s_degree, s.s_reasonTakingCourse.getName(),
+                    Arrays.toString(s.s_programmingLanguages), s.s_phoneOS,
+                    s.s_topicDED.getName(), s.s_topicCPM.getName(), s.s_topicDGS.getName(), s.s_topicVD.getName(), s.s_topicSPS.getName(),
+                    s.s_topicSPSQ.getName(), s.s_topicSPG.getName(), s.s_topicSPT.getName(), s.s_topicSPI.getName(), s.s_topicCDMA.getName(),
+                    s.s_topicUDMT.getName(), Arrays.toString(s.s_gamesPlayed), Arrays.toString(s.s_commuteToITU),
+                    Arrays.toString(s.s_traverseITU), Arrays.toString(s.s_fourNumbers), s.s_therb,
+                    s.s_number, Arrays.toString(s.s_favFilm), Arrays.toString(s.s_favTVshow), Arrays.toString(s.s_favGame), s.s_row, s.s_seat);
+        }
+        for (int i = 0; i < header.length(); i++) System.out.print("=");
+        System.out.println("\n\n\n");
     }
 
-    public static List<Student> listAttributeCategories(Collection<Student> Data, Object Attribute, Object AttributeValue, Object mainClass, Object Classification) {
-        return Data.stream().filter(student -> {
-            if (student.getAttributeValue(mainClass).equals(Classification)) {
-                return innerFunction(student, Attribute, AttributeValue);
-            }
-            return false;
-        }).collect(Collectors.toList());
-    }
-
-    public static List<Student> listAttributeCategories(Collection<Student> Data, Object Attribute, Object AttributeValue) {
-        return Data.stream().filter(student -> innerFunction(student, Attribute, AttributeValue)).collect(Collectors.toList());
-    }
-
-    private static boolean innerFunction(Object student, Object Attribute, Object AttributeValue) {
-        Object object = ((Student) student).getAttributeValue(Attribute);
-        if (object.getClass().isArray())
-            for (int i = 0; i < ((Object[]) object).length; i++) {
-                if (((Object[]) object)[i].equals(AttributeValue))
-                    return true;
-            }
-        if (object.equals(AttributeValue)) return true;
-        return false;
-    }
 }

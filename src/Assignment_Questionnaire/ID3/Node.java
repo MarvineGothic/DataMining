@@ -6,6 +6,9 @@ import java.util.Vector;
 
 import static javax.swing.tree.DefaultMutableTreeNode.EMPTY_ENUMERATION;
 
+/**
+ * @author Sergiy Isakov
+ */
 @SuppressWarnings("unchecked")
 public class Node<E> implements TreeNode {
     private E label;
@@ -108,7 +111,7 @@ public class Node<E> implements TreeNode {
                 "label = " + getLabel() +
                 ", branch = " + branch +
                 ", parent = " + getParent() +
-               *//* ", leaf = " + leaves.size() +*//*
+               *//* ", leaf = " + leaves.weightsSize() +*//*
                 '}';
     }*/
     @Override

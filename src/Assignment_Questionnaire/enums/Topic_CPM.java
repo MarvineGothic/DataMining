@@ -23,12 +23,16 @@ public enum Topic_CPM {
         return rate;
     }
 
+    public String getTopicName() {
+        return "Create predictive models";
+    }
+
     public String getName() {
         return name;
     }
 
     @Override
     public String toString() {
-        return "Create predictive models - " + name;
+        return getTopicName() + " - " + name;
     }
 }

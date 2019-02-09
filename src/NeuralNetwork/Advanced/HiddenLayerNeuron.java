@@ -1,11 +1,12 @@
 package NeuralNetwork.Advanced;
 
+import NeuralNetwork.Advanced.Utils.Utils;
 import NeuralNetwork.Advanced.exception.ZeroInputDimensionException;
 import NeuralNetwork.Advanced.exception.ZeroNeuronsException;
-import NeuralNetwork.Advanced.Utils.Utils;
 
 /**
  * Initializes weights and bias
+ *
  * @author jlmd
  */
 public class HiddenLayerNeuron {
@@ -21,21 +22,22 @@ public class HiddenLayerNeuron {
         initWeights(neurons, dimension);
     }
 
-    public float[] getBias(){
+    public float[] getBias() {
         return this.bias;
     }
 
-    public float[] getVWeights(){
+    public float[] getVWeights() {
         return this.vWeights;
     }
 
-    public float[][] getWWeights(){
+    public float[][] getWWeights() {
         return this.wWeights;
     }
 
     /**
      * Initialize weights values with random elements because initially we cant know which weights are better
-     * @param neurons Number of neurons
+     *
+     * @param neurons   Number of neurons
      * @param dimension Dimension of input data
      * @throws ZeroNeuronsException
      * @throws ZeroInputDimensionException
@@ -46,10 +48,10 @@ public class HiddenLayerNeuron {
         if (dimension == 0)
             throw new ZeroInputDimensionException();
 
-        for (int i = 0;i<neurons;i++){
+        for (int i = 0; i < neurons; i++) {
             this.bias[i] = Utils.randFloat(-0.5f, 0.5f);
             this.vWeights[i] = Utils.randFloat(-0.5f, 0.5f);
-            for (int j = 0;j<dimension;j++) {
+            for (int j = 0; j < dimension; j++) {
                 this.wWeights[j][i] = Utils.randFloat(-0.5f, 0.5f);
             }
         }

@@ -2,6 +2,7 @@ package NeuralNetwork.Advanced;
 
 /**
  * Modify weights adjusting it to expected result, based on result of analyzer
+ *
  * @author jlmd
  */
 public class Learner {
@@ -10,7 +11,7 @@ public class Learner {
     private float[][] wWeights;
     private float bOut;
 
-    public Learner(float t, float fOut, float[] f, float[] vWeights, float[][] wWeights, float[] bias, float bOut, int neurons, float[] x, int dimension){
+    public Learner(float t, float fOut, float[] f, float[] vWeights, float[][] wWeights, float[] bias, float bOut, int neurons, float[] x, int dimension) {
         this.bias = new float[neurons];
         this.vWeights = new float[neurons];
         this.wWeights = new float[dimension][neurons];
@@ -20,15 +21,16 @@ public class Learner {
 
     /**
      * Initialize the learn
-     * @param t Output result
-     * @param fOut Out function
-     * @param f Functions
+     *
+     * @param t         Output result
+     * @param fOut      Out function
+     * @param f         Functions
      * @param vWeights
      * @param wWeights
      * @param bias
      * @param bOut
-     * @param neurons Number of neurons
-     * @param x Inputs
+     * @param neurons   Number of neurons
+     * @param x         Inputs
      * @param dimension Dimension of inputs
      */
     private void initLearn(float t, float fOut, float[] f, float[] vWeights, float[][] wWeights, float[] bias, float bOut, int neurons, float[] x, int dimension) {
@@ -42,8 +44,8 @@ public class Learner {
 
 
         // Modify v weights
-        dv = fOut * (1-fOut) * error;
-        for (int i = 0;i<neurons;i++){
+        dv = fOut * (1 - fOut) * error;
+        for (int i = 0; i < neurons; i++) {
             this.vWeights[i] = vWeights[i] + n * dv * f[i];
         }
 
@@ -52,16 +54,16 @@ public class Learner {
         this.bOut = (bOut + dbOut);
 
         // Modify w weights
-        for (int i = 0;i<neurons;i++){
+        for (int i = 0; i < neurons; i++) {
             dwi[i] = f[i] * (1 - f[i]) * vWeights[i] * dv;
-            for (int j = 0;j<dimension;j++){
+            for (int j = 0; j < dimension; j++) {
                 dw[j][i] = n * dwi[i] * x[j];
                 this.wWeights[j][i] = wWeights[j][i] + dw[j][i];
             }
         }
 
         // Modify bias
-        for (int i = 0;i<neurons;i++){
+        for (int i = 0; i < neurons; i++) {
             dbi[i] = f[i] * (1 - f[i]) * vWeights[i] * dv;
             db[i] = n * dbi[i] * 1;
             this.bias[i] = bias[i] + db[i];

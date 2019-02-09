@@ -4,10 +4,8 @@ import java.util.Arrays;
 
 import static Assignment_Questionnaire.Library.ASU.isSubset;
 
-/***
- * The ItemSet class is used to store information concerning a single transaction.
- * Should not need any changes.
- *
+/**
+ * @author Sergiy Isakov
  */
 public class ItemSet implements Comparable<ItemSet> {
 
@@ -21,7 +19,12 @@ public class ItemSet implements Comparable<ItemSet> {
         this.set = set;
     }
 
-
+    /**
+     * Method is changed a bit to recognize two ItemSets as sets
+     * That mean two "different" ItemSets containing same elements in different order
+     * will have same hashCode, i.e. will be equal
+     * @return
+     */
     @Override
     public int hashCode() {
         if (set == null)
@@ -36,10 +39,10 @@ public class ItemSet implements Comparable<ItemSet> {
         return result;
     }
 
-    @Override
     /**
      * Used to determine whether two ItemSet objects are equal
      */
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof ItemSet)) {
             return false;

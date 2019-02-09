@@ -108,7 +108,7 @@ public class Node<E> implements TreeNode {
                 "label = " + getLabel() +
                 ", branch = " + branch +
                 ", parent = " + getParent() +
-               *//* ", leaf = " + leaves.size() +*//*
+               *//* ", leaf = " + leaves.weightsSize() +*//*
                 '}';
     }*/
     @Override

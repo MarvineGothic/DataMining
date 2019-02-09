@@ -23,12 +23,16 @@ public enum Topic_DED {
         return rate;
     }
 
+    public String getTopicName() {
+        return "Design efficient databases for large amounts of data";
+    }
+
     public String getName() {
         return name;
     }
 
     @Override
     public String toString() {
-        return "Design efficient databases for large amounts of data - " + name;
+        return getTopicName() + " - " + name;
     }
 }

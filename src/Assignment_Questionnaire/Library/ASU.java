@@ -9,6 +9,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
+ * @author Sergiy Isakov
+ * <p>
  * Utility to handle arrays and sets and to convert from one to another
  */
 @SuppressWarnings("unchecked")
@@ -60,7 +62,7 @@ public class ASU {
         for (i = 0; i < arr2.length; i++) {
             for (j = 0; j < arr1.length; j++) {
                 if (arr1[j].getClass().isArray())
-                    return isSubset((Object[])arr1[j], new Object[]{arr2[i]});
+                    return isSubset((Object[]) arr1[j], new Object[]{arr2[i]});
                 if (arr2[i] == arr1[j])
                     break;
             }
@@ -74,7 +76,7 @@ public class ASU {
         Set<ItemSet> set = new HashSet<>();
         for (Object aMerged : arr1) {
             if (aMerged.getClass().isArray())
-                for(int i = 0; i< Array.getLength(aMerged); i++){
+                for (int i = 0; i < Array.getLength(aMerged); i++) {
                     set.add(new ItemSet(new Object[]{Array.get(aMerged, i)}));
                 }
             else
@@ -89,6 +91,14 @@ public class ASU {
         System.arraycopy(arr2, 0, merged, arr1.length, arr2.length);
         Set<Object> set = new HashSet<>();
         set.addAll(Arrays.asList(merged));
+        return set;
+    }
+    public static Set<Object> ArraysToSet2(Object[] arr1, Object[] arr2){
+        HashSet<Object> set = new HashSet<>();
+        for (int a = 0; a < arr1.length; a++) {
+            set.add(arr1[a]);
+            set.add(arr2[a]);
+        }
         return set;
     }
 

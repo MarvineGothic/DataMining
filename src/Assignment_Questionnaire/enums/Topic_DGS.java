@@ -23,12 +23,16 @@ public enum Topic_DGS {
         return rate;
     }
 
+    public String getTopicName() {
+        return "Define groups of similar objects";
+    }
+
     public String getName() {
         return name;
     }
 
     @Override
     public String toString() {
-        return "Define groups of similar objects - " + name;
+        return getTopicName() + " - " + name;
     }
 }

@@ -1,9 +1,12 @@
 package Assignment_Questionnaire.KMean;
 
-import Assignment_Questionnaire.enums.Degree;
-
 import java.util.*;
 
+/**
+ * @author Sergiy Isakov
+ * <p>
+ * KMean utility class
+ */
 public class KMU {
     /**
      * Randomly choosing unique Objects as cluster centers
@@ -20,11 +23,9 @@ public class KMU {
         while (clusterObjects.size() < k)
             clusterObjects.add(data.get((int) (Math.random() * data.size())));
 
-        for (ClusterObject clData : clusterObjects) {
-            if (cluster instanceof KMeanCluster)
-                clusters.add(new KMeanCluster(clData));
-            // else clusters.add(new KMedoidCluster(ClusterObject));
-        }
+        for (ClusterObject clData : clusterObjects)
+            clusters.add(new KMeanCluster(clData));
+
         return clusters;
     }
 
@@ -54,13 +55,16 @@ public class KMU {
      */
     public static ClusterObject clusterMean(List<ClusterObject> cm) {
         // average(most frequent) class
-        TreeMap<Long, Enum> dM = new TreeMap<>();
-        for (Enum e : Degree.class.getEnumConstants())
-            dM.put(cm.stream().filter(a -> a.getDegree().equals(e)).count(), e);
-        Degree clazz = (Degree) dM.lastEntry().getValue();
+        Object clazz = ClusterData.getClazz();
+        TreeMap<Long, Object> dM = new TreeMap<>();
+        for (Object e : ((Class) clazz).getEnumConstants())
+            dM.put(cm.stream().filter(a -> a.getClazz().equals(e)).count(), e);
+
+
+        Object meanClass = dM.lastEntry().getValue();
 
         ClusterObject.Builder object = ClusterObject.newBuilder();
-        object.setDegree(clazz);
+        object.setClazz(meanClass);
         for (Map.Entry attr : cm.get(0).getAttributes().entrySet()) {
             String name = (String) attr.getKey();
             Double value = (cm.stream().mapToDouble(c -> c.getAttributes().get(name))).average().orElse(-100);
@@ -85,6 +89,13 @@ public class KMU {
         return Math.sqrt(result);
     }
 
+    /**
+     * Method to calculate Manhattan distance for two objects with four parameters
+     *
+     * @param i1
+     * @param i2
+     * @return
+     */
     public static double manhattanDistance(ClusterObject i1, ClusterObject i2) {
         double result = 0;
         for (Map.Entry attr : i1.getAttributes().entrySet()) {

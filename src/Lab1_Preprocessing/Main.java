@@ -38,12 +38,12 @@ public class Main {
         for (int i = 1; i < data.length; i++) {
             shoe.get(shoeTitle).add(data[i][1]);
         }
-        int initialSize = shoe.get(shoeTitle).size();
+        int initialSize = shoe.get(shoeTitle).weightsSize();
         shoes.addAll(sortDigitsOut(data, 3, "\\d{2}(?:\\.?\\d*)?"));
         //shoeTitle.matches("\\d{2}\\.?\\d");
-        //System.out.printf("Shoes:\nSize before: %d Size after: %d\nMean: %.1f  Median: %.1f\n", initialSize, shoes.size(),meanD(shoes), median(shoes));
+        //System.out.printf("Shoes:\nSize before: %d Size after: %d\nMean: %.1f  Median: %.1f\n", initialSize, shoes.weightsSize(),meanD(shoes), median(shoes));
         removeTwoPercent(shoes);
-        //System.out.println("Size after remove:" + shoes.size() + " Mean: " + meanD(shoes));
+        //System.out.println("Size after remove:" + shoes.weightsSize() + " Mean: " + meanD(shoes));
         //modes(shoes).forEach(System.out::println);
         return meanD(shoes);
     }
@@ -55,11 +55,11 @@ public class Main {
         age.put(ageTitle, new ArrayList<>());
         for (int i = 1; i < data.length; i++)
             age.get(ageTitle).add(data[i][1]);
-        int initialSize = age.get(ageTitle).size();
+        int initialSize = age.get(ageTitle).weightsSize();
         ageProcessed.addAll(sortDigitsOut(data, 1, "\\d{2}"));
-       // System.out.printf("Age:\nSize before: %d ;Size after: %d\nMean: %s ; Median: %s", initialSize, ageProcessed.size(), meanD(ageProcessed), median(ageProcessed));
+       // System.out.printf("Age:\nSize before: %d ;Size after: %d\nMean: %s ; Median: %s", initialSize, ageProcessed.weightsSize(), meanD(ageProcessed), median(ageProcessed));
         removeTwoPercent(ageProcessed);
-        //System.out.println("Size after remove:" + ageProcessed.size() + " Mean: " + meanD(ageProcessed));
+        //System.out.println("Size after remove:" + ageProcessed.weightsSize() + " Mean: " + meanD(ageProcessed));
         //modes(ageProcessed).forEach(System.out::println);
         return meanD(ageProcessed);
     }*/

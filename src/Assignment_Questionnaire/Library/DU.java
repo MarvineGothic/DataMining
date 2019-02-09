@@ -1,5 +1,10 @@
 package Assignment_Questionnaire.Library;
 
+/**
+ * @author Sergiy Isakov
+ * <p>
+ * Distance tool utility class
+ */
 public class DU {
 
     public static double MinkowskiDistance(double[] X, double[] Y, int order) {

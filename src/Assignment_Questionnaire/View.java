@@ -1,41 +1,27 @@
 package Assignment_Questionnaire;
 
 
-import Assignment_Questionnaire.utils.Listener;
-import Assignment_Questionnaire.utils.MenuHelper;
+import Assignment_Questionnaire.GUIutils.Listener;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 
-import static Assignment_Questionnaire.utils.MenuHelper.*;
+import static Assignment_Questionnaire.GUIutils.MenuHelper.*;
 
 /**
- * Created by Sergiy on 11.12.2017.
+ * @author Sergiy Isakov
  */
 public class View extends JFrame implements Assignment_Questionnaire.interfaces.View {
 
     private Listener listener;
 
     private JPanel mainPanel = new JPanel(new BorderLayout(2, 2));
-    private JPanel recipePanel = new JPanel();
+    private JPanel panel = new JPanel();
     private JPanel leftPanel = new JPanel();
     private JPanel topPanel = new JPanel();
-    private JPanel centerPanel = new JPanel();
-
-    private JTextArea textArea = new JTextArea(30, 50);
-    private JTextArea groceriesList = new JTextArea(10, 20);
-    private JTextField servings = new JTextField("0", 3);
-
-    private JScrollPane scroll = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-    private JScrollPane scrollLeft = new JScrollPane(groceriesList, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-    private JScrollPane scrollRecipe = new JScrollPane(recipePanel);
 
     private JButton leftButton;
-    private JButton clear;
-
-    private JPopupMenu recipePopUp;
-    private JPopupMenu panelPopUp;
 
     private GridBagConstraints gbc = new GridBagConstraints();
 
@@ -68,8 +54,8 @@ public class View extends JFrame implements Assignment_Questionnaire.interfaces.
 
     public void init() {
         setTitle("Data Mining Tool");
-        setPreferredSize(new Dimension(1100, 700));
-        setMinimumSize(new Dimension(1100, 700));
+        setPreferredSize(new Dimension(500, 300));
+        setMinimumSize(new Dimension(500, 300));
         setResizable(false);
         setLayout(new FlowLayout());
         mainPanel.setBorder(new TitledBorder("BorderLayout"));
@@ -79,13 +65,7 @@ public class View extends JFrame implements Assignment_Questionnaire.interfaces.
 
     public void initInstances() {
         listener = new Listener(this);
-        //pop up menu
-        recipePopUp = new JPopupMenu();
-        panelPopUp = new JPopupMenu();
-        MenuHelper.initPopUpButton(listener, recipePopUp);
-        MenuHelper.initPopUpPanel(listener, panelPopUp);
         leftButton = new JButton("Print data");
-        clear = new JButton("Clear List");
     }
 
     public void initMenuBar() {
@@ -99,95 +79,23 @@ public class View extends JFrame implements Assignment_Questionnaire.interfaces.
     public void initItems() {
 
         leftPanel.setLayout(new GridLayout(0, 1, 5, 5));
-        leftPanel.add(scrollLeft);
 
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.weightx = 1;
         gbc.weighty = 1;
 
-        recipePanel.setLayout(new GridBagLayout());
-        recipePanel.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
-        recipePanel.setBackground(new Color(255, 255, 255));
-        recipePanel.addMouseListener(listener);
-        refreshRecipePanel();
-
-        scrollRecipe.setPreferredSize(new Dimension(200, 400));
-        scrollRecipe.setWheelScrollingEnabled(true);
+        panel.setLayout(new GridBagLayout());
+        panel.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0)));
+        panel.setBackground(new Color(255, 255, 255));
+        panel.addMouseListener(listener);
 
         topPanel.setLayout(new FlowLayout(0, 15, 10));
-        topPanel.add(new JLabel("Servings"));
-        topPanel.add(servings);
         topPanel.add(leftButton);
-        topPanel.add(clear);
-
-        textArea.setEditable(false);
-        textArea.setWrapStyleWord(true);
-        textArea.setLineWrap(true);
-
-        groceriesList.setEditable(false);
-        groceriesList.setWrapStyleWord(true);
-
-        centerPanel.add(scroll);
-        centerPanel.repaint();
 
         mainPanel.add(topPanel, BorderLayout.NORTH);
         mainPanel.add(leftPanel, BorderLayout.EAST);
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
-        mainPanel.add(scrollRecipe, BorderLayout.WEST);
-
 
         leftButton.addActionListener(listener);
-        clear.addActionListener(listener);
     }
 
-    public void clearGroceriesList() {
-        groceriesList.setText("");
-    }
-
-    public void clearTextArea() {
-        textArea.setText("");
-    }
-
-    public void clearRecipePanel() {
-        recipePanel.removeAll();
-        refreshRecipePanel();
-    }
-    public void refreshRecipePanel(){
-        recipePanel.add(new JPanel(), gbc);
-    }
-
-    // getters setters
-
-
-    public JPanel getRecipePanel() {
-        return recipePanel;
-    }
-
-    public Listener getListener() {
-        return listener;
-    }
-
-    public JTextArea getTextArea() {
-        return textArea;
-    }
-
-    public JTextArea getGroceriesList() {
-        return groceriesList;
-    }
-
-    public JTextField getServings() {
-        return servings;
-    }
-
-    public JPopupMenu getRecipePopUp() {
-        return recipePopUp;
-    }
-
-    public JPopupMenu getPanelPopUp() {
-        return panelPopUp;
-    }
-
-    public JScrollPane getScrollRecipe() {
-        return scrollRecipe;
-    }
 }
